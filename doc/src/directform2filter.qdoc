@@ -1,0 +1,37 @@
+/*!
+  \qmltype DirectForm2Filter
+  \inherits AudioEffect
+  \brief Applies a DF2 filter to an audio signal.
+ */
+
+/*!
+  \qmlproperty var DirectForm2Filter::data
+
+  The DF2 filter's data.
+  Set it to a JSON object with the following entries:
+
+  \list
+    \li \c order: The filter's order, or the number of iterations it performs.
+    \li \c sosMatrix: The filter's second order sections data, as a 2D JS array of \c real values.
+            It should have \c{order / 2} sub-entries each with 6 \c real values.
+    \li \c scaleValues: The filter's second order sections scale values, as a JS array of \c real values.
+  \endlist
+
+  Example:
+  \qml
+  DirectForm2Filter {
+    data: {
+      order: 8,
+      sosMatrix: [
+        [1, 2, 1, 1, -1.999582010463876, 0.999583152065339],
+        [1, 2, 1, 1, -1.998812233343328, 0.998813374505309],
+        [1, 2, 1, 1, -1.998223471725322, 0.998224612551167],
+        [1, 2, 1, 1, -1.997904980861054, 0.997906121505067]
+      ],
+      scaleValues: [
+        0.000000285400366, 0.000000285290495, 0.000000285206461, 0.000000285161003
+      ]
+    }
+  }
+  \endqml
+ */

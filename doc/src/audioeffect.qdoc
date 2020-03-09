@@ -1,0 +1,17 @@
+/*!
+  \qmltype AudioEffect
+  \brief Analyzes and/or modifies MP3Decoder output.
+ */
+
+/*!
+  \qmlmethod bool AudioEffect::processSample(var channels, int sampleIndex, real maxValue, real minValue)
+
+  Process one sample of the \l MP3Decoder's audio signal.
+  The parameter \c channels contains one \c real sample value for each channel of the audio signal.
+  This means it is an array with 1 entry for mono signals and 2 entries for stereo signals.
+
+  This method should be overridden in custom \l AudioEffect implementations.
+  The values in \c channels can be modified.
+  However the data is only written back to the original signal if this method returns true.
+  Even if you did not modifiy the data, return false to indicate this, for improved performance.
+ */

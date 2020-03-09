@@ -1,0 +1,12 @@
+/*!
+  \qmltype MultiEffect
+  \inherits AudioEffect
+  \brief Applies multiple \l{AudioEffect}{AudioEffects} to an audio signal.
+
+ */
+
+/*!
+  \qmlproperty list<AudioEffect> MultiEffect::effects
+  A list of \l AudioEffect instances that are applied to the \l MP3Decoder's audio signal.
+  The effects are applied to the signal in the list's order.
+ */

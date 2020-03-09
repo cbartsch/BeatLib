@@ -1,0 +1,42 @@
+/*!
+  \qmltype VolumeDetector
+  \inherits DirectForm2Filter
+  \brief Detects an audio signal's volume.
+
+  Detects the volume of an \l MP3Decoder's audio signal.
+  It does so by using a \l PeakFinder on the absolute value on the signal.
+
+  It is advisible to filter the signal before using a VolumeDetector.
+  Since this is a subclass of \l DirectForm2Filter, just set its \l DirectForm2Filter::data property to do so.
+
+  The current volume can be read from \l volume.
+ */
+
+/*!
+  \qmlproperty real VolumeDetector::volume
+  \readonly
+
+  The current detected volume, a \c real value between \c 0 and \c 1.
+ */
+
+/*!
+  \qmlproperty int VolumeDetector::filterDelayMs
+
+  Set this to an estimate of the \l DirectForm2Filter's delay time, in milliseconds.
+  The volume will then be calculated and set that much time in advance.
+ */
+
+/*!
+  \qmlproperty int VolumeDetector::updateIntervalMs
+
+  Set this to a time in milliseconds the filter uses as an update interval.
+ */
+
+/*!
+  \qmlproperty int VolumeDetector::startTime
+
+  A time interval in milliseconds since 1970/01/01 when the filtering started.
+  This is used to adjust the detected volume for the \l filterDelayMs time.
+
+  You can bind this variable to \l MP3Decoder::startTime.
+ */

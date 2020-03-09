@@ -1,0 +1,37 @@
+/*!
+  \qmltype BeatDetector
+  \inherits AudioEffect
+  \brief Detects beats in audio (music) signals.
+ */
+
+/*!
+  \qmlproperty AudioEffect BeatDetector::preEffect
+
+  Set this to an \l AudioEffect instance to apply to the audio signal before starting beat detection.
+ */
+
+/*!
+  \qmlproperty AudioEffect BeatDetector::envelopeDetector
+
+  Set this to an \l AudioEffect instance to apply to detect the audio signal's envelope.
+ */
+
+/*!
+  \qmlproperty VolumeDetector BeatDetector::volumeDetector
+
+  Set this to an \l AudioEffect instance to apply to detect the audio signal's volume.
+  This is used in combination with the \l beatHalfLifeTimeMs for detecting the next beat's minimum volume.
+ */
+
+/*!
+  \qmlproperty real BeatDetector::minTimeDistanceMs
+
+  Set this to a time in milliseconds to use as a minimum time distance between detected beats.
+ */
+
+/*!
+  \qmlproperty real BeatDetector::beatHalfLifeTimeMs
+
+  Set this to a time in milliseconds to use as a time to fade out a detected beat's volume.
+  This volume is used in combination with \l volumeDetector as a minimum volume for the next detected beat.
+ */

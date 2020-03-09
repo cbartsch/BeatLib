@@ -1,0 +1,8 @@
+/*!
+  \qmltype PeakFinder
+  \inherits AudioEffect
+  \brief Finds peaks in audio signals.
+
+  This audio effect detects peaks in the \l MP3Decoder's audio signal.
+  The original signal is modified such that the peak is held until the next peak is found.
+ */
