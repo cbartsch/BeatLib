@@ -32,7 +32,12 @@ COPIES += cpqmldir
 # Generate qmltypes file after linking
 QMLTYPESFILE_OUTPUT = $$DESTDIR/plugins.qmltypes
 qtPrepareTool(QMLPLUGINDUMP, qmlplugindump)
-mac: !exists($$QMLPLUGINDUMP): QMLPLUGINDUMP = "$${QMLPLUGINDUMP}.app/Contents/MacOS/qmlplugindump"
-QMAKE_POST_LINK += $$QMLPLUGINDUMP -v -nonrelocatable $$uri "1.0" $$LIBDIR > $$QMLTYPESFILE_OUTPUT
+exists($$QMLPLUGINDUMP) {
+  mac: !exists($$QMLPLUGINDUMP): QMLPLUGINDUMP = "$${QMLPLUGINDUMP}.app/Contents/MacOS/qmlplugindump"
+  QMAKE_POST_LINK += $$QMLPLUGINDUMP -v -nonrelocatable $$uri "1.0" $$LIBDIR > $$QMLTYPESFILE_OUTPUT
+}
+else {
+  message(qmlplugindump not found.)
+}
 
 OTHER_FILES += doc/*.qdocconf doc/src/* doc/style/* doc/images/*
