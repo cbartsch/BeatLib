@@ -30,6 +30,13 @@
  */
 
 /*!
+  \qmlmethod void BeatDetector::resetState
+
+  Reset the beat detection algorithm's state.
+  Call this to treat the rest of the \l MP3Decoder's audio signal like a completely new audio signal.
+ */
+
+/*!
   \qmlproperty AudioEffect BeatDetector::preEffect
 
   Set this to an \l AudioEffect instance to apply to the audio signal before starting beat detection.

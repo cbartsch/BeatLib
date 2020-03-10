@@ -1,0 +1,29 @@
+/*!
+  \qmltype MP3MetaData
+  \ingroup beatlib
+  \brief Contains an MP3 file's meta data.
+
+  This QML type contains the meta data information from an MP3 file.
+  It can be either \c ID3v1/2 or \c ICY data.
+
+  \l MP3Decoder automatically reads the data when decoding MP3 files
+  and provides it by \l MP3Decoder::metaData.
+ */
+
+/*!
+  \qmlproperty var MP3MetaData::artist
+
+  The artist name stored in the MP3 meta data.
+ */
+
+/*!
+  \qmlproperty var MP3MetaData::album
+
+  The album name stored in the MP3 meta data.
+ */
+
+/*!
+  \qmlproperty var MP3MetaData::title
+
+  The song title name stored in the MP3 meta data.
+ */

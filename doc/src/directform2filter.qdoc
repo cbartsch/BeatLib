@@ -4,7 +4,8 @@
   \inherits AudioEffect
   \brief Applies a DF2 filter to an audio signal.
 
-  This audio effect applies a \l{https://ccrma.stanford.edu/~jos/filters/Direct_Form_II.html}{direct form 2} filter to an \l MP3Decoder's audio signal.
+  This \l AudioEffect applies a series of \l{https://ccrma.stanford.edu/~jos/filters/Direct_Form_II.html}{direct form 2}
+  filters to an \l MP3Decoder's audio signal.
  */
 
 /*!
@@ -41,4 +42,11 @@
     })
   }
   \endqml
+ */
+
+/*!
+  \qmlmethod void BeatDetector::resetState
+
+  Reset the filter algorithm's state and memory.
+  Call this to treat the rest of the \l MP3Decoder's audio signal like a completely new audio signal.
  */

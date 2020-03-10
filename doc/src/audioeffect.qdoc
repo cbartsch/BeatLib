@@ -2,6 +2,20 @@
   \qmltype AudioEffect
   \ingroup beatlib
   \brief Analyzes and/or modifies MP3Decoder output.
+
+  An \l AudioEffect can be used with \l MP3Decoder::effect to analyze and/or modify its decoded audio signal.
+
+  \l AudioEffect itself is an abstract type.
+  You can use one of the existing concrete types, or subclass \l AudioEffect yourself and override the \l processSample() method.
+
+  Existing types include:
+  \list
+    \li \l BeatDetector
+    \li \l DirectForm2Filter
+    \li \l MultiEffect
+    \li \l PeakFinder
+    \li \l VolumeDetector
+  \endlist
  */
 
 /*!
