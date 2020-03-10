@@ -56,6 +56,9 @@ signals:
   void error(QString message);
   void metaDataChanged(MP3MetaData * metaData);
 
+private slots:
+  void onStopped();
+
 private:
   static QDebug log();
 

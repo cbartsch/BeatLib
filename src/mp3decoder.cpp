@@ -66,6 +66,9 @@ private:
   QTimer *idleTimer;
   QMetaObject::Connection timerConnection;
 
+signals:
+  void stopped();
+
 public slots:
   void writeBuffer();
   void decodeNextFrame();
@@ -93,6 +96,9 @@ MP3Decoder::MP3Decoder()  :
 MP3DecoderPrivate::MP3DecoderPrivate(MP3Decoder &decoder) : d(decoder) {
   d.m_thread.setObjectName("MP3DecoderThread");
   moveToThread(&d.m_thread);
+
+  QObject::connect(this, &MP3DecoderPrivate::stopped,
+                   &d, &MP3Decoder::onStopped);
 }
 
 MP3DecoderPrivate::~MP3DecoderPrivate() {
@@ -111,11 +117,44 @@ MP3DecoderPrivate::~MP3DecoderPrivate() {
     out->stop();
     delete out;
   }
+
+  emit stopped();
 }
 
 MP3Decoder::~MP3Decoder()
 {
   stop();
+}
+
+void MP3Decoder::stop()
+{
+  if(d->running) {
+    if(d->inputStream) {
+      delete d->inputStream;
+    }
+
+    QMetaObject::invokeMethod(d, "stop");
+  }
+}
+
+void MP3DecoderPrivate::stop()
+{
+  if(running) {
+    running = false;
+
+    d.d = nullptr;
+
+    delete this;
+  }
+}
+
+void MP3Decoder::onStopped()
+{
+  m_thread.quit();
+
+  d = new MP3DecoderPrivate(*this);
+
+  emit runningChanged();
 }
 
 QDebug MP3Decoder::log()
@@ -409,39 +448,11 @@ void MP3DecoderPrivate::play(AudioStream *stream)
   emit d.runningChanged();
   decodeNextFrame();
 }
-
-void MP3Decoder::stop()
-{
-  if(d->running) {
-    if(d->inputStream) {
-      delete d->inputStream;
-    }
-
-    QMetaObject::invokeMethod(d, "stop");
-
-    m_thread.quit();
-    //m_thread.wait();
-
-    d = new MP3DecoderPrivate(*this);
-  }
-}
-
-void MP3DecoderPrivate::stop()
-{
-  if(running) {
-    running = false;
-    emit d.runningChanged();
-
-    delete this;
-  }
-}
-
 void MP3DecoderPrivate::finishNow()
 {
   emit d.finished();
   d.stop();
 }
-
 
 void MP3DecoderPrivate::bufferAvailable()
 {
