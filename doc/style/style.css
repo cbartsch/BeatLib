@@ -1,0 +1,56 @@
+body {
+   font-family: "Verdana";
+   font-size: 1em;
+   max-width: 80%;
+   margin: auto;
+}
+
+h1, h2, h3 {
+}
+
+div.sidebar {
+    float: right;
+}
+
+pre {
+    padding: 1em;
+}
+
+div.qmlproto {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+pre, div.qmlproto {
+    font-family: monospace;
+    font-size: 1.2em;
+    margin-left: 1em;
+    background-color: #F2F2F2;
+}
+
+code {
+    font-family: monospace;
+    font-size: 1.2em;
+    background-color: #F2F2F2;
+}
+
+hr {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.type {
+    color: green;
+}
+
+.qmlreadonly {
+    color: #666;
+}
+
+p.header {
+    margin-bottom: -1em;
+}
+p.footer {
+    text-align: right;
+    margin-top: -1em;
+}

@@ -1,5 +1,6 @@
 /*!
   \qmltype PeakFinder
+  \ingroup beatlib
   \inherits AudioEffect
   \brief Finds peaks in audio signals.
 

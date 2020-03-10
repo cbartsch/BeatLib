@@ -1,0 +1,49 @@
+/*!
+  \qmltype AudioFileSelector
+  \ingroup beatlib
+  \brief Shows a native dialog to select an audio file.
+
+  This QML type shows a native dialog to select an audio file.
+  You can either call it to obtain an audio file name or directly open it as \l AudioStream instance.
+
+  \note On some operating systems, like Android, the file names provided by \l audioFileSelected()
+  are may not be usable by other Qt or QML types, only by the method \l openAudioStream().
+ */
+
+/*!
+  \qmlmethod void AudioFileSelector::selectAudioFile()
+
+  Show a platform-native file dialog to select an audio file.
+
+  When the user selects a file in the dialog, \l audioFileSelected() will be emitted.
+ */
+
+/*!
+  \qmlmethod void AudioFileSelector::selectAudioStream()
+
+  Show a platform-native file dialog to select an audio file.
+
+  When the user selects a file in the dialog, \l audioStreamSelected() will be emitted.
+ */
+
+/*!
+  \qmlmethod void AudioFileSelector::openAudioStream(string fileName)
+
+  Open an audio file at \a fileName and create an \l AudioStream instance.
+ */
+
+/*!
+  \qmlsignal void AudioFileSelector::audioFileSelected(string fileName)
+
+  Emitted when the user selects an audio file after a call to \l selectAudioFile().
+
+  The parameter \a fileName is the path to the selected file.
+ */
+
+/*!
+  \qmlsignal void AudioFileSelector::audioStreamSelected(AudioStream stream)
+
+  Emitted when the user selects an audio file after a call to \l selectAudioStream().
+
+  The parameter \a stream is an \l AudioStream instance reading the selected file.
+ */

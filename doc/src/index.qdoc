@@ -1,0 +1,12 @@
+/*!
+  \page index.html
+  \title BeatLib Documentation
+
+  \section1 Introduction
+
+  BeatLib is a Qt C++/QML library for audio analysis and processing.
+
+  \section1 BeatLib QML Components
+
+  \annotatedlist beatlib
+ */

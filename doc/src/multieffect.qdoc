@@ -1,8 +1,13 @@
 /*!
   \qmltype MultiEffect
+  \ingroup beatlib
   \inherits AudioEffect
   \brief Applies multiple \l{AudioEffect}{AudioEffects} to an audio signal.
 
+  Use this QML type to apply more than \c 1 \l AudioEffect to an \l MP3Decoder's audio signal.
+
+  The \l effects are applied to the audio signal in order.
+  This matters for effects that modify the signal.
  */
 
 /*!

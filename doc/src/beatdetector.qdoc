@@ -1,7 +1,32 @@
 /*!
   \qmltype BeatDetector
+  \ingroup beatlib
   \inherits AudioEffect
   \brief Detects beats in audio (music) signals.
+
+  This \l AudioEffect detects beats in the \l MP3Decoder's audio signal.
+  It analyzes the signal's volume and detects whenever it rises significantly.
+
+  It emits the signal \l beatDetected() for each detected beat.
+ */
+
+/*!
+  \qmlsignal BeatDetector::beatDetected(int currentTime, int sampleIndex, real envValue, real diffValue, real maxValue, real volume)
+
+  Emitted when a beat is detected.
+  This happens ahead of time, when the beat is calculated from the current audio buffer.
+
+  The parameters contain information about the beat:
+  \list
+    \li \a currentTime: The current time in milliseconds since \c 1970/01/01 at the time the signal is emitted.
+    \li \a sampleIndex: Index of the beat's sample, from the start of the audio signal.
+      To calculate the beat's time in seoncds since the start of the audio signal, divide by the \l MP3Decoder::sampleRate.
+    \li \a envValue: The current amplitude of the audio signal's calculated envelope at the time of the beat.
+    \li \a diffValue: The current change in amplitude of the audio signal's calculated envelope at the time of the beat.
+    \li \a maxValue: The maximum value in the range for \a envValue and \a diffValue. Usually this is \c 1.0.
+    \li \a volume: The current volume of the audio signal's calculated envelope at the time of the beat.
+      This is only meaningful if \l BeatDetector::volumeDetector is set.
+  \endlist
  */
 
 /*!
@@ -14,13 +39,14 @@
   \qmlproperty AudioEffect BeatDetector::envelopeDetector
 
   Set this to an \l AudioEffect instance to apply to detect the audio signal's envelope.
+  This is used in combination with the \l beatHalfLifeTimeMs for detecting the next beat's minimum volume.
  */
 
 /*!
   \qmlproperty VolumeDetector BeatDetector::volumeDetector
 
-  Set this to an \l AudioEffect instance to apply to detect the audio signal's volume.
-  This is used in combination with the \l beatHalfLifeTimeMs for detecting the next beat's minimum volume.
+  You can set this to a \l VolumeDetector instance to apply to detect the audio signal's volume.
+  This way you can have information about the detected beat's volume in \l beatDetected().
  */
 
 /*!

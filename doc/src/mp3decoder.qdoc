@@ -1,7 +1,23 @@
 /*!
   \qmltype MP3Decoder
+  \ingroup beatlib
   \brief Decodes, analyzes, modifies and plays MP3 files.
  */
+
+/*!
+  \qmlmethod MP3Decoder::play(var stream)
+
+  Decode and play back an MP3 stream in the \l MP3Decoder.
+
+  The parameter \a stream can either be an MP3 file's path or an \l AudioStream instance.
+ */
+
+/*!
+  \qmlmethod MP3Decoder::stop()
+
+  Stop current audio decoding and playback.
+ */
+
 
 /*!
   \qmlproperty list<AudioEffect> MP3Decoder::effect
@@ -13,5 +29,44 @@
   \qmlproperty int MP3Decoder::startTime
   \readonly
 
-  Contains a time interval in milliseconds since 1970/01/01 when the audio signal started playing.
+  Contains a time interval in milliseconds since \c 1970/01/01 when the audio signal started playing.
+ */
+
+/*!
+  \qmlproperty int MP3Decoder::sampleRate
+  \readonly
+
+  Contains the current audio signal's sample rate, in Hertz.
+ */
+
+/*!
+  \qmlproperty bool MP3Decoder::running
+  \readonly
+
+  Contains \c true if the \l MP3Decoder is currently decoding and playing audio.
+
+  This is \c true after calling \l play() and \c false initially or after calling \l stop().
+ */
+
+/*!
+  \qmlproperty real MP3Decoder::busyRate
+  \readonly
+
+  Contains a value indicating the time the \l MP3Decoder spends being busy decoding audio.
+  This is a value between \c 0 (never busy) and \c 1 (always busy).
+ */
+
+/*!
+  \qmlproperty real MP3Decoder::busyRateAverage
+  \readonly
+
+  Contains an average of \l busyRate over the current decoding process, since calling \l play().
+ */
+
+/*!
+  \qmlproperty MP3MetaData MP3Decoder::metaData
+  \readonly
+
+  Contains meta information about the currently decoding MP3 signal.
+  This is only set if the signal contains meta data.
  */

@@ -1,7 +1,10 @@
 /*!
   \qmltype DirectForm2Filter
+  \ingroup beatlib
   \inherits AudioEffect
   \brief Applies a DF2 filter to an audio signal.
+
+  This audio effect applies a \l{https://ccrma.stanford.edu/~jos/filters/Direct_Form_II.html}{direct form 2} filter to an \l MP3Decoder's audio signal.
  */
 
 /*!
@@ -12,15 +15,19 @@
 
   \list
     \li \c order: The filter's order, or the number of iterations it performs.
+            This is twice the number of second order sections the filter contains.
+
     \li \c sosMatrix: The filter's second order sections data, as a 2D JS array of \c real values.
             It should have \c{order / 2} sub-entries each with 6 \c real values.
+            These 6 values represent this filter section's coefficients \c{a0, a1, a2, b0, b1, b2}.
+
     \li \c scaleValues: The filter's second order sections scale values, as a JS array of \c real values.
   \endlist
 
   Example:
   \qml
   DirectForm2Filter {
-    data: {
+    data: ({
       order: 8,
       sosMatrix: [
         [1, 2, 1, 1, -1.999582010463876, 0.999583152065339],
@@ -31,7 +38,7 @@
       scaleValues: [
         0.000000285400366, 0.000000285290495, 0.000000285206461, 0.000000285161003
       ]
-    }
+    })
   }
   \endqml
  */

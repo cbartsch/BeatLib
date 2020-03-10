@@ -1,5 +1,6 @@
 /*!
   \qmltype VolumeDetector
+  \ingroup beatlib
   \inherits DirectForm2Filter
   \brief Detects an audio signal's volume.
 
@@ -35,7 +36,7 @@
 /*!
   \qmlproperty int VolumeDetector::startTime
 
-  A time interval in milliseconds since 1970/01/01 when the filtering started.
+  A time interval in milliseconds since \c 1970/01/01 when the filtering started.
   This is used to adjust the detected volume for the \l filterDelayMs time.
 
   You can bind this variable to \l MP3Decoder::startTime.

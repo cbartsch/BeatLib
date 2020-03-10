@@ -3,6 +3,7 @@ description = C++/Qt/QML library for audio analysis
 
 sourcedirs = ../src src
 exampledirs = 
+headerdirs = style
 imagedirs = images
 
 sources.fileextensions = "*.cpp *.qdoc *.mm *.qml"
@@ -22,3 +23,12 @@ qhp.BeatLib.virtualFolder       = doc
 qhp.BeatLib.indexTitle          = BeatLib Components
 qhp.BeatLib.indexRoot           =
 qhp.BeatLib.extraFiles          = 
+
+# path to the CSS files if you would like to use any (here it's the current directory)
+HTML.stylesheets = style/style.css
+# the string that actually includes the CSS into documentation file
+HTML.headerstyles = "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/style.css\"/>\n"
+# what to append to every page after header
+HTML.postheader = "<p class=\"header\"><small><a href='./index.html'>BeatLib</a></small></p><hr/>"
+# what to append to every page after the content
+HTML.footer = "<hr/><p class=\"footer\"><small><a href='https://cbartsch.github.io'>cbartsch.github.io</a></small></p>"

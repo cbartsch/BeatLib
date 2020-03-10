@@ -11,7 +11,6 @@ include(src/beatlib_sources.pri)
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = at.cb.beatlib
 uri_path = $$replace(uri, '\.', "/")
-message(uri $$uri $$uri_path)
 
 COMPILER_PATH = $$[QT_INSTALL_PREFIX]
 PLATFORM_LIBRARY_POSTFIX = $$section(COMPILER_PATH, "/", -1, -1)
@@ -37,3 +36,4 @@ mac: !exists($$QMLPLUGINDUMP): QMLPLUGINDUMP = "$${QMLPLUGINDUMP}.app/Contents/M
 QMAKE_POST_LINK += $$QMLPLUGINDUMP -v -nonrelocatable $$uri "1.0" $$LIBDIR > $$QMLTYPESFILE_OUTPUT
 message(QMAKE_POST_LINK is: $$QMAKE_POST_LINK)
 
+OTHER_FILES += doc/*.qdocconf doc/src/* doc/style/* doc/images/*
