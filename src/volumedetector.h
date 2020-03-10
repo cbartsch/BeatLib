@@ -13,9 +13,6 @@ class VolumeDetector : public DirectForm2Filter
   Q_PROPERTY(areal volume READ volume NOTIFY volumeChanged)
   Q_PROPERTY(qint64 startTime READ startTime WRITE setStartTime)
 public:
-  static void registerQml() {
-    qmlRegisterType<VolumeDetector>("beats", 1, 0, "VolumeDetector");
-  }
   explicit VolumeDetector(QObject *parent = nullptr);
 
   virtual void start(const QAudioFormat &format);

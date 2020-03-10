@@ -34,6 +34,5 @@ QMLTYPESFILE_OUTPUT = $$DESTDIR/plugins.qmltypes
 qtPrepareTool(QMLPLUGINDUMP, qmlplugindump)
 mac: !exists($$QMLPLUGINDUMP): QMLPLUGINDUMP = "$${QMLPLUGINDUMP}.app/Contents/MacOS/qmlplugindump"
 QMAKE_POST_LINK += $$QMLPLUGINDUMP -v -nonrelocatable $$uri "1.0" $$LIBDIR > $$QMLTYPESFILE_OUTPUT
-message(QMAKE_POST_LINK is: $$QMAKE_POST_LINK)
 
 OTHER_FILES += doc/*.qdocconf doc/src/* doc/style/* doc/images/*

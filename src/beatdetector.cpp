@@ -84,6 +84,7 @@ void BeatDetector::resetState()
   m_lastDiff = 0;
   m_lastIndex = 0;
 }
+
 AudioEffect *BeatDetector::envDetector() const
 {
   return m_envDetector;
