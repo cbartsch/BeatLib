@@ -19,7 +19,7 @@ public:
   explicit VolumeDetector(QObject *parent = nullptr);
 
   virtual void start(const QAudioFormat &format);
-  virtual bool processSample(QVarLengthArray<areal, 1> &channels, quint64 sampleIndex, areal maxValue, areal minValue);
+  virtual bool processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue);
 
   int updateIntervalMs() const;
   void setUpdateIntervalMs(int updateIntervalMs);

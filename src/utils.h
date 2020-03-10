@@ -13,38 +13,32 @@ typedef float areal;
 typedef qreal areal;
 #endif
 
-class Utils: public QObject
+class Utils : public QObject
 {
   Q_OBJECT
 public:
-  static void registerQml() {
-    qmlRegisterSingletonType<Utils>("beats.utils", 1, 0, "BeatUtils",
-                                    [](QQmlEngine*, QJSEngine *) -> QObject * {
-      static Utils *s_qmlInstance = nullptr;
-      if(!s_qmlInstance) { s_qmlInstance = new Utils(); }
-      return s_qmlInstance;
-    });
-  }
-
   Utils();
 
   template<typename T, int N>
-  static QVarLengthArray<T, 1> toMono(QVarLengthArray<T, N> &channels)
-  {
-    QVarLengthArray<T, 1> mono(1);
-    auto &value = mono[0];
-    value = 0;
-    for(auto &i : channels) {
-      value += i;
-    }
-    value /= channels.size();
-
-    return mono;
-  }
+  static QVarLengthArray<T, 2> toMono(QVarLengthArray<T, N> &channels);
 
   Q_INVOKABLE QVariantMap calculateVertices(int numEdges, areal size, areal baseAngle);
 
 private:
 };
+
+template<typename T, int N>
+QVarLengthArray<T, 2> Utils::toMono(QVarLengthArray<T, N> &channels)
+{
+  QVarLengthArray<T, 2> mono(1);
+  auto &value = mono[0];
+  value = 0;
+  for(auto &i : channels) {
+    value += i;
+  }
+  value /= channels.size();
+
+  return mono;
+}
 
 #endif // UTILS_H

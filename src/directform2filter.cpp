@@ -63,7 +63,7 @@ void DirectForm2Filter::start(const QAudioFormat &format)
 }
 
 
-bool DirectForm2Filter::processSample(QVarLengthArray<areal, 1> &channels, quint64 /*sampleIndex*/, areal maxValue, areal minValue)
+bool DirectForm2Filter::processSample(QVarLengthArray<areal, 2> &channels, quint64 /*sampleIndex*/, areal maxValue, areal minValue)
 {
   for(int c = 0; c < channels.size(); c++) { //apply to each channel
     areal &val = channels[c];

@@ -48,7 +48,7 @@ private:
   int maxValue;
   int minValue;
   int currentSample = 0; //current samples being constructed of input bytes
-  QVarLengthArray<areal, 1> channelData; //contains samples of all channels
+  QVarLengthArray<areal, 2> channelData; //contains samples of all channels
   quint64 inputIndex = 0; //# of currently read byte
   quint64 sampleIndex = 0; //# of currently read sample
   quint64 total = 0; //total bytes read

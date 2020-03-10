@@ -6,7 +6,7 @@ PeakFinder::PeakFinder(QObject *parent) :
 {
 }
 
-bool PeakFinder::processSample(QVarLengthArray<areal, 1> &channels, quint64 /*sampleIndex*/, areal /*maxValue*/, areal /*minValue*/)
+bool PeakFinder::processSample(QVarLengthArray<areal, 2> &channels, quint64 /*sampleIndex*/, areal /*maxValue*/, areal /*minValue*/)
 {
   auto mono = Utils::toMono(channels);   //compute mono signal by arithmetic mean
   areal &value = mono[0];

@@ -20,7 +20,7 @@ void MultiEffect::start(const QAudioFormat &format) {
   }
 }
 
-bool MultiEffect::processSample(QVarLengthArray<areal, 1> &channels, quint64 sampleIndex, areal maxValue, areal minValue)
+bool MultiEffect::processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue)
 {
   bool res = false;
   for(auto effect : m_effects) {

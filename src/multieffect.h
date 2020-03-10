@@ -18,7 +18,7 @@ public:
   void setEffects(const QList<QVariant> &effects);
 
   virtual void start(const QAudioFormat &);
-  virtual bool processSample(QVarLengthArray<areal, 1> &channels, quint64 sampleIndex, areal maxValue, areal minValue);
+  virtual bool processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue);
 
 private:
   QList<QVariant> m_effects;

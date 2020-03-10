@@ -12,7 +12,7 @@ public:
   }
   explicit PeakFinder(QObject *parent = nullptr);
 
-  virtual bool processSample(QVarLengthArray<areal, 1> &channels, quint64 sampleIndex, areal maxValue, areal minValue);
+  virtual bool processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue);
 
 signals:
 

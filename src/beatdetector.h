@@ -21,7 +21,7 @@ public:
   BeatDetector();
 
   virtual void start(const QAudioFormat &);
-  virtual bool processSample(QVarLengthArray<areal, 1> &channels, quint64 sampleIndex, areal maxValue, areal minValue);
+  virtual bool processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue);
 
   AudioEffect *preEffect() const;
   void setPreEffect(AudioEffect *preEffect);

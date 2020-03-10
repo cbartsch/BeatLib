@@ -22,11 +22,6 @@ private:
 class AudioFileSelector : public QObject {
   Q_OBJECT
 public:
-  static void registerQml() {
-    qmlRegisterType<AudioFileSelector>("beats", 1, 0, "AudioFileSelector");
-    qmlRegisterUncreatableType<AudioStream>("beats", 1, 0, "AudioStream", "Only returned by AudioFileSelector.selectAudioStream()");
-  }
-
   AudioFileSelector();
   Q_INVOKABLE void selectAudioFile();
   Q_INVOKABLE void selectAudioStream();
