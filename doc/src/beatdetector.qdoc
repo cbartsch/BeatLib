@@ -22,7 +22,7 @@
     \li \a sampleIndex: Index of the beat's sample, from the start of the audio signal.
       To calculate the beat's time in seoncds since the start of the audio signal, divide by the \l MP3Decoder::sampleRate.
     \li \a envValue: The current amplitude of the audio signal's calculated envelope at the time of the beat.
-    \li \a diffValue: The current change in amplitude of the audio signal's calculated envelope at the time of the beat.
+    \li \a diffValue: The beat's intensity; this is the current change in amplitude of the audio signal's calculated envelope at the time of the beat.
     \li \a maxValue: The maximum value in the range for \a envValue and \a diffValue. Usually this is \c 1.0.
     \li \a volume: The current volume of the audio signal's calculated envelope at the time of the beat.
       This is only meaningful if \l BeatDetector::volumeDetector is set.
@@ -46,7 +46,7 @@
   \qmlproperty AudioEffect BeatDetector::envelopeDetector
 
   Set this to an \l AudioEffect instance to apply to detect the audio signal's envelope.
-  This is used in combination with the \l beatHalfLifeTimeMs for detecting the next beat's minimum volume.
+  The envelope is then analyzed and whenever it rises significantly, \l beatDetected() is emitted.
  */
 
 /*!
@@ -65,6 +65,6 @@
 /*!
   \qmlproperty real BeatDetector::beatHalfLifeTimeMs
 
-  Set this to a time in milliseconds to use as a time to fade out a detected beat's volume.
-  This volume is used in combination with \l volumeDetector as a minimum volume for the next detected beat.
+  Set this to a time in milliseconds to use as a time to fade out a detected beat's intensity.
+  This volume is used in combination with \l envelopeDetector as a minimum intensity for the next detected beat.
  */

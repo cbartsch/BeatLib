@@ -37,7 +37,10 @@
         [1, 2, 1, 1, -1.997904980861054, 0.997906121505067]
       ],
       scaleValues: [
-        0.000000285400366, 0.000000285290495, 0.000000285206461, 0.000000285161003
+        0.000000285400366,
+        0.000000285290495,
+        0.000000285206461,
+        0.000000285161003
       ]
     })
   }
@@ -45,7 +48,7 @@
  */
 
 /*!
-  \qmlmethod void BeatDetector::resetState
+  \qmlmethod void DirectForm2Filter::resetState
 
   Reset the filter algorithm's state and memory.
   Call this to treat the rest of the \l MP3Decoder's audio signal like a completely new audio signal.

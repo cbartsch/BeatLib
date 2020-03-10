@@ -1,4 +1,4 @@
-set PATH=%PATH%;D:\sdks\Felgo\5.13.2\msvc2017_64\bin
+set PATH=%PATH%;D:\sdks\Qt\5.12.3\mingw73_32\bin
 
 qdoc beatlib.qdocconf
 

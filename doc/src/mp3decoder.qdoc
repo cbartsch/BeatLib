@@ -18,9 +18,8 @@
   Stop current audio decoding and playback.
  */
 
-
 /*!
-  \qmlproperty list<AudioEffect> MP3Decoder::effect
+  \qmlproperty AudioEffect MP3Decoder::effect
   An \l AudioEffect instance that is applied to the \l MP3Decoder's audio signal.
   The effect may alter the signal or just analyze it, based on \l AudioEffect::processSample()'s return value.
 

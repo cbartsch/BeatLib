@@ -1,5 +1,7 @@
 project = BeatLib
 description = C++/Qt/QML library for audio analysis
+language = Cpp
+url = https://cbartsch.github.io/beatlib/doc/
 
 sourcedirs = ../src src
 exampledirs = 
