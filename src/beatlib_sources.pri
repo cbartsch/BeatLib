@@ -1,6 +1,10 @@
 QT += multimedia # QAudioOutput
 QT += widgets # QFileDialog
 
+android {
+  QT += androidextras
+}
+
 INCLUDEPATH += $$PWD $$PWD/../include
 
 SOURCES += $$PWD/beatlib_plugin.cpp
@@ -54,7 +58,7 @@ android {
   equals(ANDROID_TARGET_ARCH, armeabi-v7a)|equals(ANDROID_TARGET_ARCH, armeabi) {
     LIBS += $$PWD/../lib/libmpg123-android-arm.a
   }
-  equals(ANDROID_TARGET_ARCH, arm64-v8a) {
+  else:equals(ANDROID_TARGET_ARCH, arm64-v8a) {
     LIBS += $$PWD/../lib/libmpg123-android-arm64.a
   }
   else:equals(ANDROID_TARGET_ARCH, x86)  {
