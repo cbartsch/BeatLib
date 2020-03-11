@@ -5,10 +5,10 @@
   \brief Detects an audio signal's volume.
 
   Detects the volume of an \l MP3Decoder's audio signal.
-  It does so by using a \l PeakFinder on the absolute value on the signal.
+  It does so by using a \l PeakFinder on the absolute value on the filtered signal.
 
-  It is advisible to filter the signal before using a VolumeDetector.
-  Since this is a subclass of \l DirectForm2Filter, just set its \l DirectForm2Filter::data property to do so.
+  This is a subclass of \l DirectForm2Filter, but the filtering is performed on the signal's absolute value.
+  For volume detection it is advisible to set the \l DirectForm2Filter::data property to a smoothing, e.g. low-pass filter.
 
   The current volume can be read from \l volume.
  */
@@ -18,6 +18,7 @@
   \readonly
 
   The current detected volume, a \c real value between \c 0 and \c 1.
+  Realistically usually below \c 0.5, but this depends on the signal and the \l DirectForm2Filter::data setting.
  */
 
 /*!

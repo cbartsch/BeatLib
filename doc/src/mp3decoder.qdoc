@@ -2,6 +2,16 @@
   \qmltype MP3Decoder
   \ingroup beatlib
   \brief Decodes, analyzes, modifies and plays MP3 files.
+
+  This QML type decodes and plays MP3 files.
+  It can also apply signal-processing effects to the decoded data before playing.
+  Set the \l effect to any instance of \l AudioEffect for this.
+  To use more than one effect, use \l MultiEffect.
+
+  You can play a file directly by calling \l play() with a file name parameter.
+  Alternatively you can use an \l AudioStream instance as parameter to \l play().
+  Such streams can be obtained from one of the \l AudioFileSelector methods.
+  This allows using platform-native file paths, like \c content:// on Android.
  */
 
 /*!
