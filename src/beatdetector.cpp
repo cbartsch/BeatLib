@@ -44,7 +44,8 @@ bool BeatDetector::processSample(QVarLengthArray<areal, 2> &channels, quint64 sa
        ) { //if all true -> beat detected!
       m_lastIndex = sampleIndex;
       areal volume = m_volumeDetector ? m_volumeDetector->currentVolume() : 0;
-      emit beatDetected(QDateTime::currentMSecsSinceEpoch(), sampleIndex, value, diff, maxValue, volume);
+      emit beatDetected(quint64(QDateTime::currentMSecsSinceEpoch()),
+                        sampleIndex, value, diff, maxValue, volume);
     } else {
     }
   }

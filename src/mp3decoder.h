@@ -15,7 +15,7 @@ class MP3DecoderPrivate;
 class MP3Decoder : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(AudioEffect* effect READ effect WRITE setEffect DESIGNABLE true)
+  Q_PROPERTY(AudioEffect *effect READ effect WRITE setEffect DESIGNABLE true)
   Q_PROPERTY(int sampleRate READ sampleRate NOTIFY sampleRateChanged)
   Q_PROPERTY(quint64 startTime READ startTime NOTIFY started)
   Q_PROPERTY(bool running READ running NOTIFY runningChanged)

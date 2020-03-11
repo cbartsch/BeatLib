@@ -28,6 +28,8 @@ void BeatLibPlugin::registerTypes(const char *uri)
 
   // Decoder:
   qmlRegisterType<MP3Decoder>(uri, 1, 0, "MP3Decoder");
+  qmlRegisterUncreatableType<MP3MetaData>(uri, 1, 0, "MP3MetaData",
+                                          "MP3MetaData is only used for MP3Decoder.metaData");
 
   // Abstract effect:
   qmlRegisterUncreatableType<AudioEffect>(uri, 1, 0, "AudioEffect",

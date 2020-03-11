@@ -13,11 +13,6 @@ class MP3MetaData : public QObject {
 public:
   MP3MetaData(QObject *parent = nullptr);
 
-  static void registerQml() {
-    qmlRegisterUncreatableType<MP3MetaData>("beats", 1, 0, "MP3MetaData",
-                                            "MP3MetaData is only used for MP3Decoder.metaData");
-  }
-
 public slots:
   void setTitle(QString title);
   void setArtist(QString artist);

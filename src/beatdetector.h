@@ -60,7 +60,7 @@ private:
 
   void updateFadeFactor();
 signals:
-  void beatDetected(quint64 currentTime, int sampleIndex, areal envValue, areal diffValue, areal maxValue, areal volume);
+  void beatDetected(quint64 currentTime, quint64 sampleIndex, qreal envValue, qreal diffValue, qreal maxValue, qreal volume);
 };
 
 #endif // BEATDETECTOR_H
