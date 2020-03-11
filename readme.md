@@ -2,7 +2,7 @@
 
 C++/Qt/QML library for audio analysis
 
-##Documentation
+## Documentation
 
 https://cbartsch.github.io/beatlib/doc/
 
