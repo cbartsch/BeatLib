@@ -15,7 +15,7 @@ uri_path = $$replace(uri, '\.', "/")
 COMPILER_PATH = $$[QT_INSTALL_PREFIX]
 PLATFORM_LIBRARY_POSTFIX = $$section(COMPILER_PATH, "/", -1, -1)
 
-LIBDIR = $$PWD/../lib/$$PLATFORM_LIBRARY_POSTFIX
+LIBDIR = $$PWD/lib/$$PLATFORM_LIBRARY_POSTFIX
 DESTDIR = $$LIBDIR/$$uri_path
 
 DISTFILES = qmldir
