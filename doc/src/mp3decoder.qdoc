@@ -20,12 +20,16 @@
   Decode and play back an MP3 stream in the \l MP3Decoder.
 
   The parameter \a stream can either be an MP3 file's path or an \l AudioStream instance.
+
+  \sa stop(), state
  */
 
 /*!
   \qmlmethod MP3Decoder::stop()
 
   Stop current audio decoding and playback.
+
+  \sa play(), state
  */
 
 /*!
@@ -51,12 +55,61 @@
  */
 
 /*!
+  \qmlproperty bool MP3Decoder::state
+  \readonly
+
+  Contains the current internal state of the \l MP3Decoder.
+
+  This property can have one of the following values:
+
+  \list
+    \li \c MP3Decoder::Idle - When the \l MP3Decoder is currently ready to start decoding and playing audio.
+      In this state \l idle is set to true.
+      You can call \l play() in this state.
+    \li \c MP3Decoder::Playing - When the \l MP3Decoder is currently decoding and playing audio.
+      In this state \l running is set to true.
+      You can call \l stop() in this state.
+    \li \c MP3Decoder::Stopping - When the \l MP3Decoder is currently stopping the decoding process
+      In this state \l stopping is set to true.
+      You can call neither \l play() nor \l stop() in this state.
+      Instead wait until the state resets to \c Idle first.
+  \endlist
+
+  \sa idle, running, stopping, play(), stop()
+ */
+
+/*!
+  \qmlproperty bool MP3Decoder::idle
+  \readonly
+
+  Contains \c true if the \l MP3Decoder is currently ready to start decoding and playing audio.
+
+  This is \c true before calling \l play() and \c true initially or after calling \l stop().
+
+  \sa state, running, stopping, play(), stop()
+ */
+
+/*!
   \qmlproperty bool MP3Decoder::running
   \readonly
 
   Contains \c true if the \l MP3Decoder is currently decoding and playing audio.
 
-  This is \c true after calling \l play() and \c false initially or after calling \l stop().
+  This is \c true after calling \l play() and \c false initially or
+  after calling \l stop() and the current buffer has been emptied.
+
+  \sa state, idle, stopping, play(), stop()
+ */
+
+/*!
+  \qmlproperty bool MP3Decoder::stopping
+  \readonly
+
+  Contains \c true if the \l MP3Decoder is currently stopping the decoding process.
+
+  This is \c true after calling \l stop() until the current audio buffer is empty.
+
+  \sa state, idle, running, play(), stop()
  */
 
 /*!
@@ -65,6 +118,8 @@
 
   Contains a value indicating the time the \l MP3Decoder spends being busy decoding audio.
   This is a value between \c 0 (never busy) and \c 1 (always busy).
+
+  \sa busyRateAverage
  */
 
 /*!
@@ -72,6 +127,8 @@
   \readonly
 
   Contains an average of \l busyRate over the current decoding process, since calling \l play().
+
+  \sa busyRate
  */
 
 /*!

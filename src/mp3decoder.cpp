@@ -40,7 +40,7 @@ private:
   QAudioFormat format;
   int bytesPerSample;
 
-  bool running = false;
+  MP3Decoder::State state = MP3Decoder::Idle;
   bool finished = false;
   bool metaDataObtained = false;
 
@@ -84,6 +84,10 @@ private:
   inline void writeSamplesToBuffer(unsigned char *);
   static QString toString(mpg123_string *text);
   static QString toString(char *text);
+
+  inline bool running() { return state == MP3Decoder::Playing; }
+  inline bool idle() { return state == MP3Decoder::Idle; }
+  inline bool stopping() { return state == MP3Decoder::Stopping; }
 };
 #include "mp3decoder.moc" //include vtable for private class
 
@@ -91,6 +95,9 @@ MP3Decoder::MP3Decoder()  :
   d(new MP3DecoderPrivate(*this)),
   m_metaData(new MP3MetaData(this))
 {
+  QObject::connect(this, &MP3Decoder::stateChanged, this, &MP3Decoder::runningChanged);
+  QObject::connect(this, &MP3Decoder::stateChanged, this, &MP3Decoder::idleChanged);
+  QObject::connect(this, &MP3Decoder::stateChanged, this, &MP3Decoder::stoppingChanged);
 }
 
 MP3DecoderPrivate::MP3DecoderPrivate(MP3Decoder &decoder) : d(decoder) {
@@ -128,7 +135,10 @@ MP3Decoder::~MP3Decoder()
 
 void MP3Decoder::stop()
 {
-  if(d->running) {
+  if(d->running()) {
+    d->state = Stopping;
+    emit stateChanged();
+
     if(d->inputStream) {
       delete d->inputStream;
     }
@@ -139,9 +149,7 @@ void MP3Decoder::stop()
 
 void MP3DecoderPrivate::stop()
 {
-  if(running) {
-    running = false;
-
+  if(d.d) {
     d.d = nullptr;
 
     delete this;
@@ -154,7 +162,7 @@ void MP3Decoder::onStopped()
 
   d = new MP3DecoderPrivate(*this);
 
-  emit runningChanged();
+  emit stateChanged();
 }
 
 QDebug MP3Decoder::log()
@@ -170,7 +178,7 @@ void MP3DecoderPrivate::writeBuffer() {
     busyTime += QDateTime::currentMSecsSinceEpoch() - busyStart;
     busyStart = 0;
   }
-  if(!running) {
+  if(state != MP3Decoder::Playing) {
     //not running anymore
     //d.log() << "writeBuffer(), but stopped";
     return;
@@ -227,7 +235,7 @@ void MP3DecoderPrivate::writeBuffer() {
 
 void MP3DecoderPrivate::decodeNextFrame()
 {
-  if(!running || finished) {
+  if(!running() || finished) {
     return;
   }
   busyStart = QDateTime::currentMSecsSinceEpoch(); //performance testing
@@ -421,8 +429,8 @@ void MP3DecoderPrivate::play(QString path)
     return;
   }
 
-  running = true;
-  emit d.runningChanged();
+  state = MP3Decoder::Playing;
+  emit d.stateChanged();
   decodeNextFrame();
 }
 
@@ -444,8 +452,8 @@ void MP3DecoderPrivate::play(AudioStream *stream)
   inputStream = stream;
   feedNeeded = true;
 
-  running = true;
-  emit d.runningChanged();
+  state = MP3Decoder::Playing;
+  emit d.stateChanged();
   decodeNextFrame();
 }
 void MP3DecoderPrivate::finishNow()
@@ -458,14 +466,14 @@ void MP3DecoderPrivate::bufferAvailable()
 {
   auto lastUpdateTime = QDateTime::currentMSecsSinceEpoch();
   auto updateStart = QDateTime::currentMSecsSinceEpoch();
-  for(unsigned int i = 0; i < bufferPos && running; i++, inputIndex++) {
+  for(unsigned int i = 0; i < bufferPos && running(); i++, inputIndex++) {
     processInput(&inputBuffer[i]);
 
     //this loop can take up to multiple seconds
     //be sure to execute events like timers
     auto time = QDateTime::currentMSecsSinceEpoch();
     if(time - lastUpdateTime > 100) {
-      if(!running) {
+      if(!running()) {
         break;
       }
 
@@ -576,9 +584,24 @@ quint64 MP3Decoder::startTime()
   return d->startTime;
 }
 
+MP3Decoder::State MP3Decoder::state()
+{
+  return d->state;
+}
+
+bool MP3Decoder::idle()
+{
+  return d && d->idle();
+}
+
 bool MP3Decoder::running()
 {
-  return d && d->running;
+  return d && d->running();
+}
+
+bool MP3Decoder::stopping()
+{
+  return d && d->stopping();
 }
 
 MP3MetaData *MP3Decoder::metaData() const
