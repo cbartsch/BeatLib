@@ -1,6 +1,6 @@
 # BeatLib
 
-C++/Qt/QML library for audio analysis
+C++/Qt/QML library for audio decoding and signal processing. Apply any effects, filters and analyze audio data in real time.
 
 ## Documentation
 
