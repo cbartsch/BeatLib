@@ -586,7 +586,7 @@ quint64 MP3Decoder::startTime()
 
 MP3Decoder::State MP3Decoder::state()
 {
-  return d->state;
+  return d ? d->state : Stopping;
 }
 
 bool MP3Decoder::idle()
