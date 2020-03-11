@@ -27,9 +27,11 @@
  */
 
 /*!
-  \qmlmethod void AudioFileSelector::openAudioStream(string fileName)
+  \qmlmethod AudioStream AudioFileSelector::openAudioStream(string fileName)
 
-  Open an audio file at \a fileName and create an \l AudioStream instance.
+  Open an audio file at \a fileName and create and return an \l AudioStream instance.
+
+  \a fileName can be a direct file path, or any URLs native to the current platform, like \c content:// or \c file:///android_asset/ on Android.
  */
 
 /*!
