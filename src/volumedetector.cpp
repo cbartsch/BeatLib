@@ -28,11 +28,11 @@ bool VolumeDetector::processSample(QVarLengthArray<areal, 2> &channels, quint64 
   m_peakFinder.processSample(mono, sampleIndex, maxValue, minValue);
   DirectForm2Filter::processSample(mono, sampleIndex, maxValue, minValue);
 
-  if(m_startTime > 0 && (sampleIndex - m_lastNotifySampleIndex) / (areal)m_sampleRate >= m_updateIntervalMs / 1000.0) {
+  if(m_startTime > 0 && (sampleIndex - m_lastNotifySampleIndex) / areal(m_sampleRate) >= m_updateIntervalMs / 1000.0) {
 
     qint64 elapsedTime = QDateTime::currentMSecsSinceEpoch() - m_startTime;
-    qint64 sampleTime = (qint64)sampleIndex * 1000L / m_sampleRate;
-    qint64 timeDiff = qMax((qint64)0, sampleTime - (elapsedTime + m_filterDelayMs)); //calculate at which point exactly this sample will be played
+    qint64 sampleTime = qint64(sampleIndex) * 1000L / m_sampleRate;
+    qint64 timeDiff = qMax(0ll, sampleTime - (elapsedTime + m_filterDelayMs)); //calculate at which point exactly this sample will be played
 
     //qDebug() << "volume:" << volume << "in" << timeDiff << "ms" << sampleTime << elapsedTime << m_filterDelayMs;
     if(timeDiff >= 0 && timeDiff < 10000) {
@@ -45,7 +45,7 @@ bool VolumeDetector::processSample(QVarLengthArray<areal, 2> &channels, quint64 
         setVolume(volume);
         m_timers.removeOne(timer);
       });
-      timer->start(timeDiff);
+      timer->start(int(timeDiff));
 
       m_lastNotifySampleIndex = sampleIndex;
     }

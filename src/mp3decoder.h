@@ -11,6 +11,8 @@
 #include "audiofileselector.h"
 #include "mp3metadata.h"
 
+Q_DECLARE_LOGGING_CATEGORY(logBl)
+
 class MP3DecoderPrivate;
 class MP3Decoder : public QObject
 {
@@ -18,7 +20,7 @@ class MP3Decoder : public QObject
 
   Q_PROPERTY(AudioEffect *effect READ effect WRITE setEffect DESIGNABLE true)
   Q_PROPERTY(int sampleRate READ sampleRate NOTIFY sampleRateChanged)
-  Q_PROPERTY(quint64 startTime READ startTime NOTIFY started)
+  Q_PROPERTY(qint64 startTime READ startTime NOTIFY started)
 
   Q_PROPERTY(bool running READ running NOTIFY runningChanged)
   Q_PROPERTY(bool idle READ idle NOTIFY idleChanged)
@@ -48,7 +50,7 @@ public:
 
   int sampleRate() const;
 
-  quint64 startTime();
+  qint64 startTime();
 
   State state();
   bool idle();

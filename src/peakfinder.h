@@ -7,9 +7,6 @@ class PeakFinder : public AudioEffect
 {
   Q_OBJECT
 public:
-  static void registerQml() {
-    qmlRegisterType<PeakFinder>("beats", 1, 0, "PeakFinder");
-  }
   explicit PeakFinder(QObject *parent = nullptr);
 
   virtual bool processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue);

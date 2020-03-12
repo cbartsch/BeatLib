@@ -16,9 +16,6 @@ class QmlPolygon : public QQuickItem
   Q_PROPERTY(areal height READ height NOTIFY heightChanged)
   Q_OBJECT
 public:
-  static void registerQml() {
-    qmlRegisterType<QmlPolygon>("beats", 1, 0, "QmlPolygon");
-  }
   explicit QmlPolygon(QQuickItem *parent = nullptr);
 
   QVariantList vertices() const;

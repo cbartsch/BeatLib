@@ -75,7 +75,7 @@ areal BeatDetector::minTimeDistanceMs() const
 void BeatDetector::updateMinTimeSamples()
 {
   if(m_sampleRate > 0) {
-    m_minTimeDistanceSamples = m_minTimeDistanceMs * m_sampleRate / 1000;
+    m_minTimeDistanceSamples = quint64(m_minTimeDistanceMs * m_sampleRate / 1000);
   }
 }
 

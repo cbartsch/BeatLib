@@ -10,7 +10,7 @@
 #include <QDebug>
 #include <QVarLengthArray>
 
-
+Q_LOGGING_CATEGORY(logBl, "at.cb.beatlib")
 
 class MP3DecoderPrivate : public QObject {
   Q_OBJECT
@@ -43,25 +43,25 @@ private:
   MP3Decoder::State state = MP3Decoder::Idle;
   bool finished = false;
   bool metaDataObtained = false;
+  bool feedNeeded = false;
 
-  unsigned int offset;
+  unsigned int offset; //offset to convert unsigned PCM value to signed range
   int maxValue;
   int minValue;
-  int currentSample = 0; //current samples being constructed of input bytes
-  QVarLengthArray<areal, 2> channelData; //contains samples of all channels
+  qint32 currentSample = 0; //current samples being constructed of input bytes
+  quint32 totalBlocks = 0; //total blocks sent to output device
+  quint64 total = 0; //total bytes read
   quint64 inputIndex = 0; //# of currently read byte
   quint64 sampleIndex = 0; //# of currently read sample
-  quint64 total = 0; //total bytes read
-  quint32 totalBlocks = 0; //total blocks sent to output device
+  QVarLengthArray<areal, 2> channelData; //contains samples of all channels
 
   //performance testing values
   qint64 idleStart = 0, idleTime = 0, idleTimeTotal = 0;
   qint64 busyStart = 0, busyTime = 0, busyTimeTotal = 0;
 
-  quint64 startTime = 0;
+  qint64 startTime = 0;
 
-  bool feedNeeded = false;
-  AudioStream *inputStream = nullptr;
+  QPointer<AudioStream> inputStream;
 
   QTimer *idleTimer;
   QMetaObject::Connection timerConnection;
@@ -131,6 +131,11 @@ MP3DecoderPrivate::~MP3DecoderPrivate() {
 MP3Decoder::~MP3Decoder()
 {
   stop();
+
+  // cleanup properly before returning
+  // otherwise a crash can happen with "QThread: Destroyed while thread is still running"
+  // this can stall the app for until the buffer is written though
+  m_thread.wait();
 }
 
 void MP3Decoder::stop()
@@ -141,6 +146,7 @@ void MP3Decoder::stop()
 
     if(d->inputStream) {
       delete d->inputStream;
+      d->inputStream = nullptr;
     }
 
     QMetaObject::invokeMethod(d, "stop");
@@ -150,6 +156,7 @@ void MP3Decoder::stop()
 void MP3DecoderPrivate::stop()
 {
   if(d.d) {
+    d.m_thread.quit();
     d.d = nullptr;
 
     delete this;
@@ -158,8 +165,6 @@ void MP3DecoderPrivate::stop()
 
 void MP3Decoder::onStopped()
 {
-  m_thread.quit();
-
   d = new MP3DecoderPrivate(*this);
 
   emit stateChanged();
@@ -167,7 +172,7 @@ void MP3Decoder::onStopped()
 
 QDebug MP3Decoder::log()
 {
-  return qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss:zzz");
+  return qDebug(logBl) << QDateTime::currentDateTime().toString("hh:mm:ss:zzz");
 }
 
 void MP3DecoderPrivate::writeBuffer() {
@@ -189,7 +194,7 @@ void MP3DecoderPrivate::writeBuffer() {
     if(!finished) {
       decodeNextFrame();
     }
-  } else if(out->state() == QAudio::ActiveState && out->bytesFree() < (int)bufferPos) {
+  } else if(out->state() == QAudio::ActiveState && out->bytesFree() < int(bufferPos)) {
     //not enough space available in audio device output buffer
     //d.log() << "writeBuffer(), but output device buffer is full (" << out->bytesFree() << "/" << bufferPos << ")";
     //try again after some time
@@ -214,12 +219,12 @@ void MP3DecoderPrivate::writeBuffer() {
       startTime = QDateTime::currentMSecsSinceEpoch();
       emit d.started();
     }
-    dev->write((char*)inputBuffer, bufferPos);
+    dev->write(reinterpret_cast<char *>(inputBuffer), bufferPos); //cast from unsigned to signed (used as bytes so signedness is irrelevant)
     if(totalBlocks % 2 == 0) { //performance testing
       busyTimeTotal += busyTime;
       idleTimeTotal += idleTime;
-      d.m_busyRate = (qreal)busyTime / (busyTime + idleTime);
-      d.m_busyRateAverage = (qreal)busyTimeTotal / (busyTimeTotal + idleTimeTotal);
+      d.m_busyRate = qreal(busyTime) / (busyTime + idleTime);
+      d.m_busyRateAverage = qreal(busyTimeTotal) / (busyTimeTotal + idleTimeTotal);
 
       emit d.busyRateChanged();
 
@@ -247,7 +252,7 @@ void MP3DecoderPrivate::decodeNextFrame()
     //as opposed to letting the library read the file itself
     auto data = inputStream->read(bufferSize);
     if(!data.isEmpty()) {
-      auto ret = mpg123_feed(handle, (unsigned char*)data.data(), data.size());
+      auto ret = mpg123_feed(handle, reinterpret_cast<unsigned char*>(data.data()), size_t(data.size()));
       feedNeeded = false;
       if(ret != MPG123_OK) {
         d.log() << "feed return value" << ret;
@@ -282,11 +287,11 @@ void MP3DecoderPrivate::decodeNextFrame()
     format.setSampleType(encoding & MPG123_ENC_SIGNED ? QAudioFormat::SignedInt : QAudioFormat::UnSignedInt);
     bytesPerSample = format.sampleSize() / 8;
     offset = 1 << (bytesPerSample * 8 - 1);
-    maxValue = offset - 1;
+    maxValue = int(offset - 1);
     minValue = -maxValue - 1;
     channelData.resize(channels);
     out = new QAudioOutput(format);
-    out->setBufferSize(outputBufferSize);
+    out->setBufferSize(int(outputBufferSize));
     d.log() << "received format: Fs = " << rate << ", channels = " << channels << ", bytes per sample = " << bytesPerSample;
     d.log() << "expected/actual QAudioOutput.bufferSize():" << outputBufferSize << out->bufferSize();
 
@@ -487,11 +492,16 @@ void MP3DecoderPrivate::bufferAvailable()
 void MP3DecoderPrivate::writeSamplesToBuffer(unsigned char *buffer)
 {
   for(int j = 0; j < format.channelCount(); j++) {
-    int outSample = channelData[format.channelCount() - 1 - j]; //reverse order of channel samples
+    //reverse order of channel samples
+    areal value = channelData[format.channelCount() - 1 - j];
+
+    //convert float value to int to write to output buffer:
+    int outSample = int(value);
 
     if(format.sampleType() == QAudioFormat::UnSignedInt) {
       outSample += offset;
-    } //else -> signed: do nothing, float: not supported yet
+    }
+    //else -> signed: do nothing, float: not supported yet
 
     int index = - j * bytesPerSample;
     for(int k = 0; k < bytesPerSample; k++) {
@@ -518,8 +528,8 @@ QString MP3DecoderPrivate::toString(char *text)
 
 void MP3DecoderPrivate::processInput(unsigned char *value)
 {
-  int &sample = currentSample;
-  int byteIndex = inputIndex % bytesPerSample;
+  qint32 &sample = currentSample;
+  int byteIndex = int(inputIndex % quint64(bytesPerSample));
   if(format.byteOrder() != QAudioFormat::LittleEndian) {
     sample = *value + (sample << 8); //big endian
   } else {
@@ -529,21 +539,21 @@ void MP3DecoderPrivate::processInput(unsigned char *value)
     //full sample received
 
     if(format.sampleType() == QAudioFormat::SignedInt) {
-      bool sign = sample & offset;
+      bool sign = sample & int(offset);
       if(sign) {
         if(bytesPerSample == 3) {
-          sample = sample | 0xff000000;
+          sample = sample | int(0xff000000);
         } else if(bytesPerSample == 2) {
-          sample = sample | 0xffff0000;
+          sample = sample | int(0xffff0000);
         } else if(bytesPerSample == 1) {
-          sample = sample | 0xffffff00;
+          sample = sample | int(0xffffff00);
         }
       }
     } else if(format.sampleType() == QAudioFormat::UnSignedInt) {
       sample -= offset;
     } //else -> float: not supported yet
 
-    int channelIndex = (inputIndex / bytesPerSample) % format.channelCount();
+    int channelIndex = int(inputIndex / quint64(bytesPerSample)) % format.channelCount();
     channelData[channelIndex] = sample;
 
     if(channelIndex == format.channelCount() - 1) {
@@ -579,7 +589,7 @@ int MP3Decoder::sampleRate() const
   return d->format.sampleRate();
 }
 
-quint64 MP3Decoder::startTime()
+qint64 MP3Decoder::startTime()
 {
   return d->startTime;
 }

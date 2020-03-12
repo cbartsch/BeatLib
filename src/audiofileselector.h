@@ -11,7 +11,7 @@ class AudioStream : public QObject {
 
 public:
   AudioStream(QObject *parent, AudioStreamPrivate *d) : QObject(parent), d(d) { }
-  ~AudioStream();
+  virtual ~AudioStream() Q_DECL_OVERRIDE;
 
   QByteArray read(int numBytes);
 

@@ -10,9 +10,6 @@ class DirectForm2Filter : public AudioEffect
   Q_PROPERTY(const QVariantMap & data WRITE setData DESIGNABLE true)
 
 public:
-  static void registerQml() {
-    qmlRegisterType<DirectForm2Filter>("beats", 1, 0, "DirectForm2Filter");
-  }
   DirectForm2Filter(QObject *parent = nullptr);
 
   virtual void start(const QAudioFormat &format);

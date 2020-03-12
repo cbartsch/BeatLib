@@ -4,9 +4,9 @@ AudioEffect::AudioEffect(QObject *parent) : QObject(parent)
 {
 }
 
-AudioEffect::~AudioEffect()
+void AudioEffect::start(const QAudioFormat &)
 {
-
+  // does nothing, can be overridden
 }
 
 bool AudioEffect::enabled() const

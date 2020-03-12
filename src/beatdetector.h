@@ -15,9 +15,6 @@ class BeatDetector : public AudioEffect
   Q_PROPERTY(int beatHalfLifeTimeMs READ beatHalfLifeTimeMs WRITE setBeatHalfLifeTimeMs)
   Q_PROPERTY(VolumeDetector *volumeDetector MEMBER m_volumeDetector)
 public:
-  static void registerQml() {
-    qmlRegisterType<BeatDetector>("beats", 1, 0, "BeatDetector");
-  }
   BeatDetector();
 
   virtual void start(const QAudioFormat &);

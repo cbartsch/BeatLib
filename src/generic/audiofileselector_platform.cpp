@@ -34,7 +34,6 @@ void AudioFileSelector::selectAudioFile()
   auto name = QFileDialog::getOpenFileName(nullptr, "Open media file",
                                            QStandardPaths::writableLocation(QStandardPaths::MusicLocation),
                                            "Audio files (*.mp3)");
-  qDebug() << "name" << name;
   if(!name.isEmpty()) {
     emit audioFileSelected(name);
   }
@@ -46,7 +45,6 @@ void AudioFileSelector::selectAudioStream()
   auto name = QFileDialog::getOpenFileName(nullptr, "Open media file",
                                            QStandardPaths::writableLocation(QStandardPaths::MusicLocation),
                                            "Audio files (*.mp3)");
-  qDebug() << "name" << name;
   if(!name.isEmpty()) {
     emit audioStreamSelected(new AudioStream(this, new AudioStreamPrivate(name)));
   }

@@ -8,10 +8,6 @@ class MultiEffect : public AudioEffect
   Q_OBJECT
   Q_PROPERTY(QList<QVariant> effects READ effects WRITE setEffects DESIGNABLE true)
 public:
-  static void registerQml() {
-    qmlRegisterType<MultiEffect>("beats", 1, 0, "MultiEffect");
-  }
-
   explicit MultiEffect();
 
   QList<QVariant> effects() const;
