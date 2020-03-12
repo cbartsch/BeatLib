@@ -49,12 +49,12 @@ QByteArray AudioStream::read(int numBytes) {
   //byte[] jArr = new byte[numBytes];
   //int numBytes = inputStream.read(jArr, 0, numBytes);
   jbyteArray jArr = env->NewByteArray(numBytes);
-  int numRead = d->inputStream.callMethod<int>("read", "([BII)I", jArr, 0, (jint)numBytes);
+  int numRead = d->inputStream.callMethod<int>("read", "([BII)I", jArr, 0, jint(numBytes));
 
   QByteArray arr;
   if(numRead > 0) {
     arr = QByteArray(numRead, Qt::Uninitialized);
-    env->GetByteArrayRegion(jArr, 0, numRead, (jbyte*)arr.data());
+    env->GetByteArrayRegion(jArr, 0, numRead, reinterpret_cast<jbyte *>(arr.data()));
     env->DeleteLocalRef(jArr);
   }
 
