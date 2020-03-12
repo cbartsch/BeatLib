@@ -7,7 +7,7 @@
   You can either call it to obtain an audio file name or directly open it as \l AudioStream instance.
 
   \note On some operating systems, like Android, the file names provided by \l audioFileSelected()
-  are may not be usable by other Qt or QML types, only by the method \l openAudioStream().
+  may not be usable by other Qt or QML types, only by the method \l openAudioStream().
  */
 
 /*!

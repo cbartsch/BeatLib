@@ -20,7 +20,7 @@
 
     \li \c sosMatrix: The filter's second order sections data, as a 2D JS array of \c real values.
             It should have \c{order / 2} sub-entries each with 6 \c real values.
-            These 6 values represent this filter section's coefficients \c{a0, a1, a2, b0, b1, b2}.
+            These 6 values represent this filter section's coefficients \c{B0, B1, B2, A0, A1, A2}.
 
     \li \c scaleValues: The filter's second order sections scale values, as a JS array of \c real values.
   \endlist
@@ -45,6 +45,8 @@
     })
   }
   \endqml
+
+  \note The value \c A0 for a DF2 filter is always \c 1, so the actual value of the fourth entry in a sos-section is ignored.
  */
 
 /*!
