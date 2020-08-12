@@ -11,7 +11,6 @@ class VolumeDetector : public DirectForm2Filter
   Q_PROPERTY(int filterDelayMs READ filterDelayMs WRITE setFilterDelayMs)
   Q_PROPERTY(int updateIntervalMs READ updateIntervalMs WRITE setUpdateIntervalMs NOTIFY updateIntervalChanged)
   Q_PROPERTY(areal volume READ volume NOTIFY volumeChanged)
-  Q_PROPERTY(qint64 startTime READ startTime WRITE setStartTime)
 public:
   explicit VolumeDetector(QObject *parent = nullptr);
 
@@ -27,9 +26,6 @@ public:
   int filterDelayMs() const;
   void setFilterDelayMs(int filterDelayMs);
 
-  qint64 startTime() const;
-  void setStartTime(const qint64 &startTime);
-
   Q_INVOKABLE virtual void resetState();
 
 signals:
@@ -44,11 +40,6 @@ private:
   //currentVolume = lastly detected volume in processSample()
   //volume = actual volume at current point in time of playback
   areal m_volume = 0, m_currentVolume = 0;
-  int m_sampleRate = 0;
-  quint64 m_lastNotifySampleIndex = 0;
-  qint64 m_startTime = 0;
-
-  QList<std::shared_ptr<QTimer>> m_timers;
 
   PeakFinder m_peakFinder;
 };

@@ -15,6 +15,8 @@ void MultiEffect::setEffects(const QList<QVariant> &effects)
 }
 
 void MultiEffect::start(const QAudioFormat &format) {
+  AudioEffect::start(format);
+
   for(QVariant effect : m_effects) {
     effect.value<AudioEffect *>()->start(format);
   }

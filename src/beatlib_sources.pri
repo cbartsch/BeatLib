@@ -19,6 +19,7 @@ SOURCES += \
     $$PWD/multieffect.cpp \
     $$PWD/utils.cpp \
     $$PWD/volumedetector.cpp \
+    $$PWD/spectrumdetector.cpp \
     $$PWD/qmlpolygon.cpp \
     $$PWD/peakfinder.cpp \
     $$PWD/mp3metadata.cpp
@@ -33,6 +34,7 @@ android {
 
 HEADERS += \
     $$PWD/mp3decoder.h \
+    $$PWD/mp3decoder_p.h \
     $$PWD/audiofileselector.h \
     $$PWD/audioeffect.h \
     $$PWD/directform2filter.h \
@@ -40,6 +42,7 @@ HEADERS += \
     $$PWD/multieffect.h \
     $$PWD/utils.h \
     $$PWD/volumedetector.h \
+    $$PWD/spectrumdetector.h \
     $$PWD/qmlpolygon.h \
     $$PWD/peakfinder.h \
     $$PWD/mp3metadata.h
@@ -57,12 +60,15 @@ android {
 android {
   equals(ANDROID_TARGET_ARCH, armeabi-v7a)|equals(ANDROID_TARGET_ARCH, armeabi) {
     LIBS += $$PWD/../lib/libmpg123-android-arm.a
+    LIBS += $$PWD/../lib/libfftw3-android-arm.a
   }
   else:equals(ANDROID_TARGET_ARCH, arm64-v8a) {
     LIBS += $$PWD/../lib/libmpg123-android-arm64.a
+    LIBS += $$PWD/../lib/libfftw3-android-arm64.a
   }
   else:equals(ANDROID_TARGET_ARCH, x86)  {
     LIBS += $$PWD/../lib/libmpg123-android-x86.a
+    LIBS += $$PWD/../lib/libfftw3-android-x86.a
   }
   else:error(This Android ABI is not supported for LibMpg123: $$ANDROID_TARGET_ARCH)
 }
@@ -71,9 +77,11 @@ ios {
 }
 msvc {
   LIBS += $$PWD/../lib/libmpg123-msvc.lib
+  LIBS += $$PWD/../lib/libfftw3-msvc.lib
 }
 mingw {
   LIBS += $$PWD/../lib/libmpg123-mingw.a
+  LIBS += $$PWD/../lib/libfftw3-mingw.a
 }
 macx {
   LIBS += $$PWD/../lib/libmpg123-mac.a

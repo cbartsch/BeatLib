@@ -12,13 +12,13 @@ class DirectForm2Filter : public AudioEffect
 public:
   DirectForm2Filter(QObject *parent = nullptr);
 
-  virtual void start(const QAudioFormat &format);
-  virtual bool processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue);
+  virtual void start(const QAudioFormat &format) Q_DECL_OVERRIDE;
+  virtual bool processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue) Q_DECL_OVERRIDE;
 
   Q_INVOKABLE void set(int order, QList<QVariant> sosMatrix, QList<QVariant> scaleValues);
   void set(int order, const double sosMatrix[][6], const double scaleValues[]);
 
-  Q_INVOKABLE virtual void resetState();
+  Q_INVOKABLE virtual void resetState() Q_DECL_OVERRIDE;
 
   void setData(const QVariantMap &data);
 

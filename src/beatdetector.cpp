@@ -7,7 +7,8 @@ BeatDetector::BeatDetector()
 
 void BeatDetector::start(const QAudioFormat &format)
 {
-  m_sampleRate = format.sampleRate();
+  AudioEffect::start(format);
+
   updateFadeFactor();
   updateMinTimeSamples();
   QAudioFormat mono(format); //copy format

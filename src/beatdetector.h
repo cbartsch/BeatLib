@@ -53,8 +53,6 @@ private:
   int m_beatHalfLifeTimeMs = 1000;
   areal m_fadeFactor = 0;
 
-  areal m_sampleRate = 0;
-
   void updateFadeFactor();
 signals:
   void beatDetected(quint64 currentTime, quint64 sampleIndex, qreal envValue, qreal diffValue, qreal maxValue, qreal volume);

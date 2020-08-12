@@ -10,6 +10,7 @@
 #include "beatdetector.h"
 #include "multieffect.h"
 #include "volumedetector.h"
+#include "spectrumdetector.h"
 #include "peakfinder.h"
 #include "utils.h"
 
@@ -41,6 +42,8 @@ void BeatLibPlugin::registerTypes(const char *uri)
   qmlRegisterType<MultiEffect>(uri, 1, 0, "MultiEffect");
   qmlRegisterType<PeakFinder>(uri, 1, 0, "PeakFinder");
   qmlRegisterType<VolumeDetector>(uri, 1, 0, "VolumeDetector");
+  qmlRegisterType<SpectrumDetector>(uri, 1, 0, "SpectrumDetector");
+  qRegisterMetaType<SpectrumData>();
 
   // Utility types:
   qmlRegisterType<QmlPolygon>(uri, 1, 0, "QmlPolygon");

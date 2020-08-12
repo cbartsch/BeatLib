@@ -35,6 +35,8 @@ void DirectForm2Filter::set(int order, const double sosMatrix[][6], const double
 
 void DirectForm2Filter::resetState()
 {
+  AudioEffect::resetState();
+
   for(auto &val : m_memory) {
     val = 0;
   }
@@ -57,6 +59,8 @@ void DirectForm2Filter::setOrder(int order)
 
 void DirectForm2Filter::start(const QAudioFormat &format)
 {
+  AudioEffect::start(format);
+
   //for each section and channel, 3 values need to be stored in memory (v[n], v[n-1] and v[n-2])
   m_memory.resize(3 * m_sections * format.channelCount());
   for(double &x : m_memory) { x = 0; }
