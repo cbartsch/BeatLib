@@ -31,7 +31,7 @@ void SpectrumDetector::start(const QAudioFormat &format)
 
   m_input = (double*) fftw_malloc(sizeof(double) * m_spectrumSize);
   m_output = (std::complex<double>*) fftw_malloc(sizeof(std::complex<double>) * m_spectrumSize);
-  m_plan = fftw_plan_dft_r2c_1d(m_spectrumSize, m_input, reinterpret_cast<fftw_complex*>(m_output), FFTW_ESTIMATE);
+  m_plan = fftw_plan_dft_r2c_1d(m_spectrumSize, m_input, reinterpret_cast<fftw_complex*>(m_output), FFTW_MEASURE);
 }
 
 bool SpectrumDetector::processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue)
