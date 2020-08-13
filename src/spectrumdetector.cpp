@@ -89,11 +89,14 @@ bool SpectrumDetector::processSample(QVarLengthArray<areal, 2> &channels, quint6
 
     m_currentIndex = 0;
 
+    SpectrumData s;
+    s.maxFrequency = maxFrequency;
+    s.meanFrequency = meanFrequency;
+    s.dcValue = std::abs(dc);
+
+    m_currentSpectrumData = s;
+
     notifyAtTime(sampleIndex, 0, 10000, [=]() {
-      SpectrumData s;
-      s.maxFrequency = maxFrequency;
-      s.meanFrequency = meanFrequency;
-      s.dcValue = std::abs(dc);
       setSpectrumData(s);
     });
   }
@@ -109,6 +112,11 @@ int SpectrumDetector::spectrumSize() const
 SpectrumData SpectrumDetector::spectrumData() const
 {
   return m_spectrumData;
+}
+
+SpectrumData SpectrumDetector::currentSpectrumData()
+{
+  return m_currentSpectrumData;
 }
 
 void SpectrumDetector::setSpectrumSize(int spectrumSize)

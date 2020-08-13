@@ -4,6 +4,7 @@
 #include "audioeffect.h"
 #include "directform2filter.h"
 #include "volumedetector.h"
+#include "spectrumdetector.h"
 #include "utils.h"
 
 class BeatDetector : public AudioEffect
@@ -14,6 +15,7 @@ class BeatDetector : public AudioEffect
   Q_PROPERTY(areal minTimeDistanceMs READ minTimeDistanceMs WRITE setMinTimeDistanceMs)
   Q_PROPERTY(int beatHalfLifeTimeMs READ beatHalfLifeTimeMs WRITE setBeatHalfLifeTimeMs)
   Q_PROPERTY(VolumeDetector *volumeDetector MEMBER m_volumeDetector)
+  Q_PROPERTY(SpectrumDetector *spectrumDetector MEMBER m_spectrumDetector)
 public:
   BeatDetector();
 
@@ -38,6 +40,7 @@ private:
   AudioEffect *m_preEffect = nullptr;
   AudioEffect *m_envDetector = nullptr;
   VolumeDetector *m_volumeDetector = nullptr;
+  SpectrumDetector *m_spectrumDetector = nullptr;
 
   areal m_lastValue = 0, m_lastDiff = 0, m_maxDiff = 0;
   bool m_rising = true;
@@ -55,7 +58,9 @@ private:
 
   void updateFadeFactor();
 signals:
-  void beatDetected(quint64 currentTime, quint64 sampleIndex, qreal envValue, qreal diffValue, qreal maxValue, qreal volume);
+  void beatDetected(quint64 currentTime, quint64 sampleIndex,
+                    qreal envValue, qreal diffValue, qreal maxValue,
+                    qreal volume, SpectrumData spectrumData);
 };
 
 #endif // BEATDETECTOR_H

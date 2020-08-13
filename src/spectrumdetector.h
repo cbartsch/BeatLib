@@ -46,6 +46,7 @@ public:
   int spectrumSize() const;
 
   SpectrumData spectrumData() const;
+  SpectrumData currentSpectrumData();
 
 public slots:
   void setSpectrumSize(int spectrumSize);
@@ -60,6 +61,7 @@ signals:
 private:
   void destroyFftPlan();
 
+  SpectrumData m_currentSpectrumData { 0, 0, 0 };
   SpectrumData m_spectrumData { 0, 0, 0 };
 
   AudioEffect *m_preEffect = nullptr;
