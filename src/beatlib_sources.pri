@@ -70,7 +70,7 @@ android {
     LIBS += $$PWD/../lib/libmpg123-android-x86.a
     LIBS += $$PWD/../lib/libfftw3-android-x86.a
   }
-  else:error(This Android ABI is not supported for LibMpg123: $$ANDROID_TARGET_ARCH)
+  else:error(This Android ABI is not supported for BeatLib: $$ANDROID_TARGET_ARCH)
 }
 ios {
   LIBS += $$PWD/../lib/libmpg123-ios.a
