@@ -7,9 +7,16 @@ SpectrumDetector::SpectrumDetector(QObject *parent) : AudioEffect(parent)
 
 SpectrumDetector::~SpectrumDetector()
 {
-  fftw_destroy_plan(m_plan);
-  fftw_free(m_input);
-  fftw_free(m_output);
+  destroyFftPlan();
+}
+
+void SpectrumDetector::destroyFftPlan()
+{
+  if(m_plan) {
+    fftw_destroy_plan(m_plan);
+    fftw_free(m_input);
+    fftw_free(m_output);
+  }
 }
 
 void SpectrumDetector::start(const QAudioFormat &format)
@@ -19,6 +26,8 @@ void SpectrumDetector::start(const QAudioFormat &format)
   AudioEffect::start(format);
 
   m_currentIndex = 0;
+
+  destroyFftPlan();
 
   m_input = (double*) fftw_malloc(sizeof(double) * m_spectrumSize);
   m_output = (std::complex<double>*) fftw_malloc(sizeof(std::complex<double>) * m_spectrumSize);

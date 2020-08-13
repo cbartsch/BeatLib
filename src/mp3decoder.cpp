@@ -63,7 +63,7 @@ MP3Decoder::~MP3Decoder()
 
 void MP3Decoder::stop()
 {
-  if(d->running()) {
+  if(d && d->running()) {
     d->state = Stopping;
     emit stateChanged();
 
@@ -509,12 +509,12 @@ void MP3Decoder::setEffect(AudioEffect* value)
 
 int MP3Decoder::sampleRate() const
 {
-  return d->format.sampleRate();
+  return d ? d->format.sampleRate() : 0;
 }
 
 qint64 MP3Decoder::startTime()
 {
-  return d->startTime;
+  return d ? d->startTime : 0;
 }
 
 MP3Decoder::State MP3Decoder::state()

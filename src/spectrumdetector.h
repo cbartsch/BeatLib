@@ -58,6 +58,8 @@ signals:
   void startFrequencyChanged(double startFrequency);
 
 private:
+  void destroyFftPlan();
+
   SpectrumData m_spectrumData { 0, 0, 0 };
 
   AudioEffect *m_preEffect = nullptr;
@@ -66,9 +68,9 @@ private:
   double m_startFrequency = 250;
 
   int m_currentIndex = -1;
-  fftw_plan m_plan;
-  double *m_input;
-  std::complex<double> *m_output;
+  fftw_plan m_plan = nullptr;
+  double *m_input = nullptr;
+  std::complex<double> *m_output = nullptr;
 };
 
 #endif // SPECTRUMDETECTOR_H

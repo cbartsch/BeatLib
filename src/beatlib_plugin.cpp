@@ -49,8 +49,7 @@ void BeatLibPlugin::registerTypes(const char *uri)
   qmlRegisterType<QmlPolygon>(uri, 1, 0, "QmlPolygon");
   qmlRegisterSingletonType<Utils>(uri, 1, 0, "BeatUtils",
                                   [](QQmlEngine*, QJSEngine *) -> QObject * {
-    static Utils s_qmlInstance;
-    return &s_qmlInstance;
+    return new Utils();
   });
 
   qRegisterMetaType<areal>("areal");
