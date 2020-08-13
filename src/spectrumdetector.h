@@ -31,6 +31,7 @@ class SpectrumDetector : public AudioEffect
 {
   Q_OBJECT
   Q_PROPERTY(int spectrumSize READ spectrumSize WRITE setSpectrumSize NOTIFY spectrumSizeChanged)
+  Q_PROPERTY(double startFrequency MEMBER m_startFrequency NOTIFY startFrequencyChanged)
   Q_PROPERTY(AudioEffect* preEffect MEMBER m_preEffect NOTIFY preEffectChanged)
   Q_PROPERTY(SpectrumData spectrumData READ spectrumData WRITE setSpectrumData NOTIFY spectrumDataChanged)
 
@@ -54,6 +55,7 @@ signals:
   void spectrumSizeChanged(int spectrumSize);
   void preEffectChanged(AudioEffect* preEffect);
   void spectrumDataChanged(SpectrumData spectrumData);
+  void startFrequencyChanged(double startFrequency);
 
 private:
   SpectrumData m_spectrumData { 0, 0, 0 };
@@ -61,6 +63,7 @@ private:
   AudioEffect *m_preEffect = nullptr;
 
   int m_spectrumSize = 4096;
+  double m_startFrequency = 250;
 
   int m_currentIndex = -1;
   fftw_plan m_plan;

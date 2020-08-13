@@ -48,6 +48,9 @@ bool SpectrumDetector::processSample(QVarLengthArray<areal, 2> &channels, quint6
 
     int nSmooth = 1;
     double max = 0, maxIndex = 0, mean = 0, sum = 0;
+
+    int startIndex = m_spectrumSize * m_startFrequency / m_sampleRate;
+
     for(int i = 1; i < m_spectrumSize / 2 - (nSmooth - 1); i++) {
       double smoothed = 0;
 
@@ -60,7 +63,7 @@ bool SpectrumDetector::processSample(QVarLengthArray<areal, 2> &channels, quint6
 
       smoothed /= nSmooth;
 
-      if(smoothed > max) {
+      if(i >= startIndex && smoothed > max) {
         max = smoothed;
         maxIndex = i;
       }
