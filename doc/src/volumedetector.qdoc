@@ -33,12 +33,3 @@
 
   Set this to a time in milliseconds the filter uses as an update interval.
  */
-
-/*!
-  \qmlproperty int VolumeDetector::startTime
-
-  A time interval in milliseconds since \c 1970/01/01 when the filtering started.
-  This is used to adjust the detected volume for the \l filterDelayMs time.
-
-  You can bind this variable to \l MP3Decoder::startTime.
- */

@@ -36,3 +36,31 @@
 
   \note This method is not callable from QML, it is only called internal from \l MP3Decoder.
  */
+
+/*!
+  \qmlproperty int AudioEffect::startTime
+
+  A time interval in milliseconds since \c 1970/01/01 when the filtering started.
+
+  Implementations can use this to calculate the actual time when a specific sample in the audio signal will be played back.
+
+  You can bind this variable in QML to \l MP3Decoder::startTime.
+ */
+
+/*!
+  \qmlproperty bool AudioEffect::enabled
+
+  Determines if the effect is enabled.
+
+  If this property is set to false, \l MP3Decoder and \l MultiEffect will ignore this effect.
+ */
+
+/*!
+  \qmlmethod void AudioEffect::resetState
+
+  Reset the audio effect algorithm's state and memory.
+  Call this to treat the rest of the \l MP3Decoder's audio signal like a completely new audio signal.
+
+  Implementations of this class may override this method to clear any temporary algorithm state.
+ */
+

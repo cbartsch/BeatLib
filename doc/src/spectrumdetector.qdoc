@@ -1,0 +1,50 @@
+/*!
+  \qmltype SpectrumDetector
+  \ingroup beatlib
+  \inherits AudioEffect
+  \brief Detects an audio signal's frequency spectrum.
+
+  Detects information about an \l MP3Decoder's audio signal's spectrum.
+  It does so by performing a fast fourier transform (FFT) on the audio signal.
+  It then calculates certain information from the FFT spectrum.
+  That information is then available via \l spectrumData.
+
+  This effect uses the \l{http://www.fftw.org/}{FFTW3 library} internally.
+ */
+
+/*!
+  \qmlproperty SpectrumData SpectrumDetector::spectrumData
+  \readonly
+
+  Contains information about the audio signal at the current playback time.
+
+  This is a C++ object with the following properties:
+  \list
+    \li \c maxFrequency - The frequency with the highest amplitude, but not below \l startFrequency.
+    \li \c meanFrequency - The mean frequency of the power spectrum.
+      This is calculated by averaging every frequency weighted by its power (square of the amplitude).
+    \li \c dcValue - The amplitude of the DC value (frequency 0).
+  \endlist
+ */
+
+/*!
+  \qmlproperty real SpectrumDetector::startFrequency
+
+  Minimum frequency for detecting \l spectrumData's \c maxFrequency.
+ */
+
+/*!
+  \qmlproperty int SpectrumDetector::spectrumSize
+
+  Size for the FFT transform, in samples.
+
+  Powers of 2, e.g. 1024 will yield the best results.
+ */
+
+/*!
+  \qmlproperty AudioEffect SpectrumDetector::preEffect
+
+  An instance of an \l AudioEffect implementation to be applied to the input signal before the spectrum analysis.
+
+  You can set this to any \l AudioEffect instance, or \c null, which is the default value.
+ */
