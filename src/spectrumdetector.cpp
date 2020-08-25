@@ -45,7 +45,12 @@ bool SpectrumDetector::processSample(QVarLengthArray<areal, 2> &channels, quint6
   double monoValue = mono[0];
 
   // normalize sample to range [-1, 1]:
-  m_input[m_currentIndex] = (monoValue - minValue) * 2.0 / (maxValue - minValue) - 1;
+  float valRaw = (monoValue - minValue) * 2.0 / (maxValue - minValue) - 1;
+
+  // apply hamming window
+  float valWindowed = valRaw * 0.5 * (1 - qCos(2 * M_PI * m_currentIndex / (m_spectrumSize - 1)));
+
+  m_input[m_currentIndex] = valWindowed;
 
   m_currentIndex++;
 
