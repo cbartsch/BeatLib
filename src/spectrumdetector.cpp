@@ -25,6 +25,10 @@ void SpectrumDetector::start(const QAudioFormat &format)
 
   AudioEffect::start(format);
 
+  QAudioFormat mono(format); //copy format
+  mono.setChannelCount(1); //only need to analyze mono channel of audio signal
+  if(m_preEffect) { m_preEffect->start(mono); }
+
   m_currentIndex = 0;
 
   destroyFftPlan();
