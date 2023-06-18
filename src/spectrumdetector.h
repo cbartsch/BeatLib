@@ -13,7 +13,7 @@ struct SpectrumData {
   Q_PROPERTY(double maxFrequency MEMBER maxFrequency CONSTANT)
   Q_PROPERTY(double meanFrequency MEMBER meanFrequency CONSTANT)
   Q_PROPERTY(double dcValue MEMBER dcValue CONSTANT)
-  QML_ELEMENT
+  QML_VALUE_TYPE(spectrumData)
 
 public:
   double maxFrequency, meanFrequency, dcValue;
