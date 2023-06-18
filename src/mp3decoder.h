@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QtQml>
-#include <QAudioOutput>
+#include <QAudioSink>
 
 #include "mpg123.h"
 
@@ -17,6 +17,7 @@ class MP3DecoderPrivate;
 class MP3Decoder : public QObject
 {
   Q_OBJECT
+  QML_ELEMENT
 
   Q_PROPERTY(AudioEffect *effect READ effect WRITE setEffect DESIGNABLE true)
   Q_PROPERTY(int sampleRate READ sampleRate NOTIFY sampleRateChanged)

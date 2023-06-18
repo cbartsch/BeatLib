@@ -25,9 +25,12 @@ void SpectrumDetector::start(const QAudioFormat &format)
 
   AudioEffect::start(format);
 
-  QAudioFormat mono(format); //copy format
-  mono.setChannelCount(1); //only need to analyze mono channel of audio signal
-  if(m_preEffect) { m_preEffect->start(mono); }
+  if(m_preEffect) {
+    QAudioFormat mono(format); //copy format
+    mono.setChannelCount(1); //only need to analyze mono channel of audio signal
+
+    m_preEffect->start(format);
+  }
 
   m_currentIndex = 0;
 
@@ -40,7 +43,7 @@ void SpectrumDetector::start(const QAudioFormat &format)
 
 bool SpectrumDetector::processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue)
 {
-  auto mono = Utils::toMono(channels);
+  auto mono = Utils::toMono<areal, 2>(channels);
 
   if(m_preEffect) { //apply pre-effect, if set
     m_preEffect->processSample(mono, sampleIndex, maxValue, minValue);

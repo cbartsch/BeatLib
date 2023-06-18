@@ -14,8 +14,16 @@
 #include "peakfinder.h"
 #include "utils.h"
 
+#ifdef Q_OS_ANDROID
+#undef stderr
+#include <bits/struct_file.h>
+FILE *stderr = (&__sF[2]);
+#endif
+
 void BeatLibPlugin::registerTypes(const char *uri)
 {
+  // note: no longer used in Qt 6, auto-generated via QML_ELEMENT macros
+
   qDebug() << "BeatLib plugin: register types" << uri;
 
   // @uri at.cb.beatlib

@@ -11,6 +11,8 @@ class VolumeDetector : public DirectForm2Filter
   Q_PROPERTY(int filterDelayMs READ filterDelayMs WRITE setFilterDelayMs)
   Q_PROPERTY(int updateIntervalMs READ updateIntervalMs WRITE setUpdateIntervalMs NOTIFY updateIntervalChanged)
   Q_PROPERTY(areal volume READ volume NOTIFY volumeChanged)
+  QML_ELEMENT
+
 public:
   explicit VolumeDetector(QObject *parent = nullptr);
 

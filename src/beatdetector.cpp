@@ -21,7 +21,7 @@ void BeatDetector::start(const QAudioFormat &format)
 
 bool BeatDetector::processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue)
 {
-  QVarLengthArray<areal, 2> mono = Utils::toMono(channels);   //compute mono signal by arithmetic mean
+  QVarLengthArray<areal, 2> mono = Utils::toMono<areal, 2>(channels);   //compute mono signal by arithmetic mean
   areal &value = mono[0];
 
   if(m_preEffect) { //apply pre-effect, if set

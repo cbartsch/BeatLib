@@ -13,6 +13,7 @@ struct SpectrumData {
   Q_PROPERTY(double maxFrequency MEMBER maxFrequency CONSTANT)
   Q_PROPERTY(double meanFrequency MEMBER meanFrequency CONSTANT)
   Q_PROPERTY(double dcValue MEMBER dcValue CONSTANT)
+  QML_ELEMENT
 
 public:
   double maxFrequency, meanFrequency, dcValue;
@@ -34,6 +35,7 @@ class SpectrumDetector : public AudioEffect
   Q_PROPERTY(double startFrequency MEMBER m_startFrequency NOTIFY startFrequencyChanged)
   Q_PROPERTY(AudioEffect* preEffect MEMBER m_preEffect NOTIFY preEffectChanged)
   Q_PROPERTY(SpectrumData spectrumData READ spectrumData WRITE setSpectrumData NOTIFY spectrumDataChanged)
+  QML_ELEMENT
 
 public:
   explicit SpectrumDetector(QObject *parent = nullptr);

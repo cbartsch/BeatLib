@@ -16,6 +16,8 @@ class BeatDetector : public AudioEffect
   Q_PROPERTY(int beatHalfLifeTimeMs READ beatHalfLifeTimeMs WRITE setBeatHalfLifeTimeMs)
   Q_PROPERTY(VolumeDetector *volumeDetector MEMBER m_volumeDetector)
   Q_PROPERTY(SpectrumDetector *spectrumDetector MEMBER m_spectrumDetector)
+  QML_ELEMENT
+
 public:
   BeatDetector();
 

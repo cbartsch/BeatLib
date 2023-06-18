@@ -8,6 +8,7 @@ class DirectForm2Filter : public AudioEffect
 {
   Q_OBJECT
   Q_PROPERTY(const QVariantMap & data WRITE setData DESIGNABLE true)
+  QML_ELEMENT
 
 public:
   DirectForm2Filter(QObject *parent = nullptr);

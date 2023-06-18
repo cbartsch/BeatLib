@@ -17,7 +17,7 @@ private:
 
   ~MP3DecoderPrivate();
 
-  QAudioOutput *out = nullptr;
+  QAudioSink *out = nullptr;
 
   mpg123_handle *handle;
 

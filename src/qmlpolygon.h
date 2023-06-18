@@ -11,10 +11,12 @@
 
 class QmlPolygon : public QQuickItem
 {
+  Q_OBJECT
   Q_PROPERTY(QVariantList vertices READ vertices WRITE setVertices)
   Q_PROPERTY(areal width READ width NOTIFY widthChanged)
   Q_PROPERTY(areal height READ height NOTIFY heightChanged)
-  Q_OBJECT
+  QML_ELEMENT
+
 public:
   explicit QmlPolygon(QQuickItem *parent = nullptr);
 

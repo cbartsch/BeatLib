@@ -7,6 +7,8 @@ class MultiEffect : public AudioEffect
 {
   Q_OBJECT
   Q_PROPERTY(QList<QVariant> effects READ effects WRITE setEffects DESIGNABLE true)
+  QML_ELEMENT
+
 public:
   explicit MultiEffect();
 

@@ -5,7 +5,7 @@
 #include <QIODevice>
 #include <QEventLoop>
 #include <QAudioDecoder>
-#include <QAudioOutput>
+#include <QAudioSink>
 #include <QDateTime>
 #include <QDebug>
 #include <QVarLengthArray>
@@ -204,19 +204,38 @@ void MP3DecoderPrivate::decodeNextFrame()
     format.setSampleRate(rate);
     format.setChannelCount(channels);
     bytesPerSample = mpg123_encsize(encoding);
-    format.setSampleSize(bytesPerSample * 8); //set in bits
-    format.setCodec("audio/pcm");
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(encoding & MPG123_ENC_SIGNED ? QAudioFormat::SignedInt : QAudioFormat::UnSignedInt);
-    bytesPerSample = format.sampleSize() / 8;
+
+    // TODO Qt 6 migration
+    if(bytesPerSample == 1) {
+      format.setSampleFormat(QAudioFormat::SampleFormat::UInt8);
+    }
+    else if(bytesPerSample == 2) {
+      format.setSampleFormat(QAudioFormat::SampleFormat::Int16);
+    }
+    else if(bytesPerSample == 4) {
+      format.setSampleFormat(QAudioFormat::SampleFormat::Int32);
+    }
+    else {
+      format.setSampleFormat(QAudioFormat::SampleFormat::Unknown);
+      qWarning() << "MP3Decoder: Unsupported sample size:" << bytesPerSample << "bytes.";
+    }
+    format.setChannelConfig(QAudioFormat::ChannelConfig::ChannelConfigStereo);
+    bytesPerSample = format.bytesPerSample();
+
+//    format.setSampleSize(bytesPerSample * 8); //set in bits
+//    format.setCodec("audio/pcm");
+//    format.setByteOrder(QAudioFormat::LittleEndian);
+//    format.setSampleType(encoding & MPG123_ENC_SIGNED ? QAudioFormat::SignedInt : QAudioFormat::UnSignedInt);
+//    bytesPerSample = format.sampleSize() / 8;
+
     offset = 1 << (bytesPerSample * 8 - 1);
     maxValue = int(offset - 1);
     minValue = -maxValue - 1;
     channelData.resize(channels);
-    out = new QAudioOutput(format);
+    out = new QAudioSink(format);
     out->setBufferSize(int(outputBufferSize));
     d.log() << "received format: Fs = " << rate << ", channels = " << channels << ", bytes per sample = " << bytesPerSample;
-    d.log() << "expected/actual QAudioOutput.bufferSize():" << outputBufferSize << out->bufferSize();
+    d.log() << "expected/actual QAudioSink.bufferSize():" << outputBufferSize << out->bufferSize();
 
     idleTimer->setInterval(100); //check every 100ms if output needs to be written
     timerConnection = connect(idleTimer, &QTimer::timeout, this, &MP3DecoderPrivate::writeBuffer);
@@ -370,6 +389,9 @@ void MP3DecoderPrivate::play(AudioStream *stream)
   idleTimer = new QTimer(this);
 
   handle = mpg123_new(nullptr, nullptr);
+
+  qDebug() << "mpg handle is:" << handle;
+
   if(mpg123_open_feed(handle) != MPG123_OK) {
     QString errorStr = mpg123_strerror(handle);
     qWarning() << "Cannot open audio feed" << errorStr;
@@ -421,15 +443,20 @@ void MP3DecoderPrivate::writeSamplesToBuffer(unsigned char *buffer)
     //convert float value to int to write to output buffer:
     int outSample = int(value);
 
-    if(format.sampleType() == QAudioFormat::UnSignedInt) {
+    // TODO Qt 6 migration
+
+    if(format.sampleFormat() == QAudioFormat::SampleFormat::UInt8) {
       outSample += offset;
     }
-    //else -> signed: do nothing, float: not supported yet
+    else if(format.sampleFormat() == QAudioFormat::SampleFormat::Float) {
+      qWarning() << "MP3Decoder: float format is not supported yet.";
+    }
+    //else -> signed: do nothing
 
     int index = - j * bytesPerSample;
     for(int k = 0; k < bytesPerSample; k++) {
       if(buffer + index - k >= inputBuffer) {
-        if(format.byteOrder() != QAudioFormat::LittleEndian) {
+        if(false/* && format.byteOrder() != QAudioFormat::LittleEndian*/) {
           buffer[index - k] = (outSample >> (8 * k)) & 0xff; //big endian
         } else {
           buffer[index - k] = (outSample >> (8 * (bytesPerSample - k - 1))) & 0xff; //little endian
@@ -453,7 +480,9 @@ void MP3DecoderPrivate::processInput(unsigned char *value)
 {
   qint32 &sample = currentSample;
   int byteIndex = int(inputIndex % quint64(bytesPerSample));
-  if(format.byteOrder() != QAudioFormat::LittleEndian) {
+
+  // TODO Qt 6 migration
+  if(QSysInfo::ByteOrder != QSysInfo::LittleEndian) {
     sample = *value + (sample << 8); //big endian
   } else {
     sample += *value << (byteIndex * 8); //little endian
@@ -461,7 +490,13 @@ void MP3DecoderPrivate::processInput(unsigned char *value)
   if(byteIndex == bytesPerSample - 1) {
     //full sample received
 
-    if(format.sampleType() == QAudioFormat::SignedInt) {
+    if(format.sampleFormat() == QAudioFormat::SampleFormat::UInt8) {
+      sample -= offset;
+    }
+    else if(format.sampleFormat() == QAudioFormat::SampleFormat::Float) {
+      qWarning() << "MP3Decoder: float format is not supported yet.";
+    }
+    else {
       bool sign = sample & int(offset);
       if(sign) {
         if(bytesPerSample == 3) {
@@ -472,9 +507,7 @@ void MP3DecoderPrivate::processInput(unsigned char *value)
           sample = sample | int(0xffffff00);
         }
       }
-    } else if(format.sampleType() == QAudioFormat::UnSignedInt) {
-      sample -= offset;
-    } //else -> float: not supported yet
+    }
 
     int channelIndex = int(inputIndex / quint64(bytesPerSample)) % format.channelCount();
     channelData[channelIndex] = sample;
@@ -484,7 +517,7 @@ void MP3DecoderPrivate::processInput(unsigned char *value)
 
       //true if any effect changed any value
       bool changed = d.m_effect && d.m_effect->enabled() &&
-          d.m_effect->processSample(channelData, sampleIndex, maxValue, minValue);
+                     d.m_effect->processSample(channelData, sampleIndex, maxValue, minValue);
 
       sampleIndex++;
 

@@ -20,7 +20,7 @@ void VolumeDetector::setVolume(areal volume)
 
 bool VolumeDetector::processSample(QVarLengthArray<areal, 2> &channels, quint64 sampleIndex, areal maxValue, areal minValue)
 {
-  auto mono = Utils::toMono(channels);
+  auto mono = Utils::toMono<areal, 2>(channels);
   areal &volume = mono[0];
   volume = qAbs(volume / maxValue);
 

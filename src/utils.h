@@ -16,6 +16,9 @@ typedef qreal areal;
 class Utils : public QObject
 {
   Q_OBJECT
+  QML_NAMED_ELEMENT(BeatUtils)
+  QML_SINGLETON
+
 public:
   Utils();
 

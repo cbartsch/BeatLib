@@ -9,6 +9,8 @@ class MP3MetaData : public QObject {
   Q_PROPERTY(QString title MEMBER m_title WRITE setTitle NOTIFY titleChanged)
   Q_PROPERTY(QString artist MEMBER m_artist WRITE setArtist NOTIFY artistChanged)
   Q_PROPERTY(QString album MEMBER m_album WRITE setAlbum NOTIFY albumChanged)
+  QML_ELEMENT
+  QML_UNCREATABLE("MP3MetaData is only used for MP3Decoder.metaData")
 
 public:
   MP3MetaData(QObject *parent = nullptr);

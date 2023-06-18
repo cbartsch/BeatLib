@@ -6,6 +6,8 @@
 class PeakFinder : public AudioEffect
 {
   Q_OBJECT
+  QML_ELEMENT
+
 public:
   explicit PeakFinder(QObject *parent = nullptr);
 

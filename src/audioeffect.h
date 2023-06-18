@@ -14,6 +14,9 @@ class AudioEffect : public QObject
   Q_OBJECT
   Q_PROPERTY(bool enabled READ enabled WRITE setEnabled)
   Q_PROPERTY(qint64 startTime READ startTime WRITE setStartTime)
+  QML_ELEMENT
+  QML_UNCREATABLE("AudioEffect is abstract, only implementations can be instantiated.")
+
 public:
   AudioEffect(QObject *parent = nullptr);
 

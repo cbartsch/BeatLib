@@ -8,6 +8,8 @@
 struct AudioStreamPrivate;
 class AudioStream : public QObject {
   Q_OBJECT
+  QML_ELEMENT
+  QML_UNCREATABLE("Only returned by AudioFileSelector.selectAudioStream()")
 
 public:
   AudioStream(QObject *parent, AudioStreamPrivate *d) : QObject(parent), d(d) { }
@@ -21,6 +23,8 @@ private:
 
 class AudioFileSelector : public QObject {
   Q_OBJECT
+  QML_ELEMENT
+
 public:
   AudioFileSelector();
   Q_INVOKABLE void selectAudioFile();
