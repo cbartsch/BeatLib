@@ -64,6 +64,12 @@ target_include_directories(BeatLib PRIVATE
 
 target_link_libraries(BeatLib PUBLIC FFTW3 MPG123 Qt6::Qml Qt6::Multimedia Qt6::Widgets Qt6::Quick)
 
+if(MSVC)
+  target_compile_options(BeatLib PUBLIC $<$<CONFIG:Release>:-Ox>)
+else()
+  target_compile_options(BeatLib PUBLIC $<$<CONFIG:Release>:-O3>)
+endif()
+
 message("Build plugin with ${CMAKE_BUILD_TYPE}")
 
 target_compile_definitions(BeatLib
