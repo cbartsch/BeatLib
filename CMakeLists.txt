@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.16)
 
 project(BeatLib VERSION 0.1 LANGUAGES CXX)
 
@@ -18,8 +19,8 @@ endif()
 
 qt_add_qml_module(BeatLib
     PLUGIN_TARGET BeatLib
-    URI at.cb.beatlib
-    OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/at/cb/beatlib
+    URI at.cb.BeatLib
+    OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/at/cb/BeatLib
     VERSION 1.0
     SOURCES ${Sources}
     NO_GENERATE_PLUGIN_SOURCE CLASS_NAME BeatLibPlugin

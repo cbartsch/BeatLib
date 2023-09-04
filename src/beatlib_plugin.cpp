@@ -14,11 +14,11 @@
 #include "peakfinder.h"
 #include "utils.h"
 
-#ifdef Q_OS_ANDROID
-#undef stderr
-#include <bits/struct_file.h>
-FILE *stderr = (&__sF[2]);
-#endif
+//#ifdef Q_OS_ANDROID
+//#undef stderr
+//#include <bits/struct_file.h>
+//FILE *stderr = (&__sF[2]);
+//#endif
 
 void BeatLibPlugin::registerTypes(const char *uri)
 {
