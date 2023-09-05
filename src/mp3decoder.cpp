@@ -12,6 +12,11 @@
 
 #include <mp3decoder_p.h>
 
+// WASM has no thread support (until Qt 6.5)
+#ifdef Q_OS_WASM
+#define NO_THREADS
+#endif
+
 Q_LOGGING_CATEGORY(logBl, "at.cb.beatlib")
 
 MP3Decoder::MP3Decoder()  :
@@ -24,8 +29,10 @@ MP3Decoder::MP3Decoder()  :
 }
 
 MP3DecoderPrivate::MP3DecoderPrivate(MP3Decoder &decoder) : d(decoder) {
+#ifndef NO_THREADS
   d.m_thread.setObjectName("MP3DecoderThread");
   moveToThread(&d.m_thread);
+#endif
 
   QObject::connect(this, &MP3DecoderPrivate::stopped,
                    &d, &MP3Decoder::onStopped);
@@ -55,10 +62,12 @@ MP3Decoder::~MP3Decoder()
 {
   stop();
 
+#ifndef NO_THREADS
   // cleanup properly before returning
   // otherwise a crash can happen with "QThread: Destroyed while thread is still running"
   // this can stall the app for until the buffer is written though
   m_thread.wait();
+#endif
 }
 
 void MP3Decoder::stop()
@@ -79,7 +88,9 @@ void MP3Decoder::stop()
 void MP3DecoderPrivate::stop()
 {
   if(d.d) {
+#ifndef NO_THREADS
     d.m_thread.quit();
+#endif
     d.d = nullptr;
 
     delete this;
@@ -269,7 +280,8 @@ void MP3DecoderPrivate::decodeNextFrame()
     }
   } else if(mc == MPG123_ERR) {
     QString errorStr = mpg123_strerror(handle);
-    d.log() << "MP3Decoder error: " << errorStr;
+    int errorCode = mpg123_errcode(handle);
+    d.log() << "MP3Decoder error:" << errorCode << errorStr;
     emit d.error(errorStr);
     d.stop();
   } else if(mc != MPG123_OK && mc != MPG123_NEW_FORMAT && mc != MPG123_NEED_MORE) {
@@ -303,7 +315,7 @@ void MP3DecoderPrivate::readMetaData()
     metaDataObtained = true;
 
     if(id3v2) {
-      d.log() << "Obtained ID3v2 meta data.";
+      d.log() << "Obtained ID3v2 meta data:" << toString(id3v2->title);
       d.m_metaData->setTitle(toString(id3v2->title));
       d.m_metaData->setAlbum(toString(id3v2->album));
       d.m_metaData->setArtist(toString(id3v2->artist));
@@ -348,16 +360,20 @@ void MP3DecoderPrivate::readMetaData()
 void MP3Decoder::play(QString path)
 {
   //invoke in background thread
+#ifndef NO_THREADS
   m_thread.start();
   m_thread.setPriority(QThread::Priority::TimeCriticalPriority);
+#endif
   QMetaObject::invokeMethod(d, "play", Q_ARG(QString, path));
 }
 
 void MP3Decoder::play(AudioStream *stream)
 {
   //invoke in background thread
+#ifndef NO_THREADS
   m_thread.start();
   m_thread.setPriority(QThread::Priority::TimeCriticalPriority);
+#endif
   QMetaObject::invokeMethod(d, "play", Q_ARG(AudioStream*, stream));
 }
 

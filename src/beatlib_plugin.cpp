@@ -20,6 +20,9 @@
 //FILE *stderr = (&__sF[2]);
 //#endif
 
+extern void qml_register_types_at_cb_BeatLib();
+Q_GHS_KEEP_REFERENCE(qml_register_types_at_cb_BeatLib)
+
 void BeatLibPlugin::registerTypes(const char *uri)
 {
   // note: no longer used in Qt 6, auto-generated via QML_ELEMENT macros
@@ -66,6 +69,9 @@ void BeatLibPlugin::registerTypes(const char *uri)
 void BeatLibPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
   qDebug() << "Beat lib plugin: initialize engine";
+
+  volatile auto registration = &qml_register_types_at_cb_BeatLib;
+  Q_UNUSED(registration);
 
   Q_UNUSED(engine)
   Q_UNUSED(uri)

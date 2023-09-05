@@ -23,7 +23,8 @@ qt_add_qml_module(BeatLib
     OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/at/cb/BeatLib
     VERSION 1.0
     SOURCES ${Sources}
-    NO_GENERATE_PLUGIN_SOURCE CLASS_NAME BeatLibPlugin
+    NO_GENERATE_PLUGIN_SOURCE
+    CLASS_NAME BeatLibPlugin
 )
 set_target_properties(BeatLib PROPERTIES OUTPUT_NAME $<IF:$<CONFIG:DEBUG>,BeatLibd,BeatLib>)
 
@@ -55,11 +56,16 @@ elseif(ANDROID)
   message("Link FFTW3 and MPG123 Android-${ANDROID_ABI} build.")
   set_target_properties(FFTW3 PROPERTIES IMPORTED_LOCATION ${LIBDIR}/libfftw3-android-${ANDROID_ABI}.a)
   set_target_properties(MPG123 PROPERTIES IMPORTED_LOCATION ${LIBDIR}/libmpg123-android-${ANDROID_ABI}.a)
+elseif(EMSCRIPTEN)
+  message("Link FFTW3 and MPG123 WASM build.")
+  set_target_properties(FFTW3 PROPERTIES IMPORTED_LOCATION ${LIBDIR}/libfftw3-wasm.a)
+  set_target_properties(MPG123 PROPERTIES IMPORTED_LOCATION ${LIBDIR}/libmpg123-wasm.a)
 else()
   # TODO macOS and iOS support
+  message("FFTW3 and MPG123 not supported!")
 endif()
 
-target_include_directories(BeatLib PRIVATE
+target_include_directories(BeatLib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/src
   ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

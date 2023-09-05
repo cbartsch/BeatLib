@@ -2,7 +2,6 @@
 #define BEATDETECTOR_H
 
 #include "audioeffect.h"
-#include "directform2filter.h"
 #include "volumedetector.h"
 #include "spectrumdetector.h"
 #include "utils.h"
